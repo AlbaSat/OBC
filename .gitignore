@@ -1,3 +1,6 @@
+# Visual Studio
+.vs/
+
 # Prerequisites
 *.d
 
@@ -37,6 +40,7 @@
 *.hex
 
 # Debug files
+Debug/
 *.dSYM/
 *.su
 *.idb
