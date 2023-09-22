@@ -11,7 +11,7 @@ Last tested: Sep. 15, 2023
 
 New Project → GCC C ASF Board Project 
 
-Device Family → UC3L → AT32UC3L0256 → User Board template - UC3 L0/L3U/L4U 
+Device Family → UC3L → AT32UC3L064 → User Board template - UC3 L0/L3U/L4U 
 
  
 
