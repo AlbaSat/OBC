@@ -1,0 +1,107 @@
+#
+# Copyright (c) 2010 - 2018 Microchip Technology Inc. and its subsidiaries.
+#
+# \asf_license_start
+#
+# \page License
+#
+# Subject to your compliance with these terms, you may use Microchip
+# software and any derivatives exclusively with Microchip products.
+# It is your responsibility to comply with third party license terms applicable
+# to your use of third party software (including open source software) that
+# may accompany Microchip software.
+#
+# THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES,
+# WHETHER EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE,
+# INCLUDING ANY IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY,
+# AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL MICROCHIP BE
+# LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, INCIDENTAL OR CONSEQUENTIAL
+# LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND WHATSOEVER RELATED TO THE
+# SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS BEEN ADVISED OF THE
+# POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE FULLEST EXTENT
+# ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY
+# RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
+# THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+#
+# \asf_license_stop
+#
+
+# Perform a JTAG chip erase command
+.PHONY: chiperase
+chiperase:
+	@echo $(MSG_ERASING_CHIP)
+	$(Q)$(PROGRAM) chiperase
+
+# Get CPU information
+.PHONY: cpuinfo
+cpuinfo:
+	@echo $(MSG_GETTING_CPU_INFO)
+	$(Q)$(PROGRAM) cpuinfo
+
+# Open a debug connection with the MCU
+.PHONY: debug
+debug: $(filter program,$(MAKECMDGOALS))
+	@echo $(MSG_DEBUGGING)
+	$(Q)$(GDBPROXY) $(FLASH:%=-f%)
+
+# Perform a flash erase
+.PHONY: erase
+erase:
+# The erase target should only be executed when program target is NOT given.
+ifeq ($(filter program,$(MAKECMDGOALS)),)
+	@echo $(MSG_ERASING)
+	$(Q)$(PROGRAM) erase $(FLASH:%=-f%)
+else
+	@:
+endif
+
+# Stop CPU execution
+.PHONY: halt
+halt:
+	@echo $(MSG_HALTING)
+	$(Q)$(PROGRAM) halt
+
+# Program MCU memory from ELF output file
+.PHONY: program
+program: $(target)
+	@echo $(MSG_PROGRAMMING)
+	$(Q)$(PROGRAM) program $(FLASH:%=-f%) $(PROG_CLOCK:%=-c%) -e -v $(if $(findstring reset,$(MAKECMDGOALS)),-R) $(if $(findstring run,$(MAKECMDGOALS)),-r) $(target)
+
+# Reset MCU.
+.PHONY: reset
+reset:
+# The reset target should only be executed when run and program targets are NOT
+# given.
+ifeq ($(filter run program,$(MAKECMDGOALS)),)
+	@echo $(MSG_RESETTING)
+	$(Q)$(PROGRAM) reset
+else
+	@:
+endif
+
+# Read CPU registers
+.PHONY: readregs
+readregs:
+	@echo $(MSG_READING_CPU_REGS)
+	$(Q)$(PROGRAM) readregs
+
+# Start CPU execution
+.PHONY: run
+run:
+# The run target should only be executed when the program target is NOT given.
+ifeq ($(filter program,$(MAKECMDGOALS)),)
+	@echo $(MSG_RUNNING)
+	$(Q)$(PROGRAM) run $(if $(findstring reset,$(MAKECMDGOALS)),-R)
+else
+	@:
+endif
+
+# Protect chip by setting security bit
+.PHONY: secureflash
+# TODO: the secureflash target is not thread safe and should depend upon erase
+# and program if these goals are given to make. By adding these dependencies to
+# secureflash will cause make to print unnecessary "Nothing to be done for..."
+# messages.
+secureflash:
+	@echo $(MSG_SECURING_FLASH)
+	$(Q)$(PROGRAM) secureflash

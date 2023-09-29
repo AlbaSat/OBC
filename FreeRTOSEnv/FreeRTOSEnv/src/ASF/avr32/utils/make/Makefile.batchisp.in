@@ -1,0 +1,128 @@
+#
+# Copyright (c) 2010 - 2018 Microchip Technology Inc. and its subsidiaries.
+#
+# \asf_license_start
+#
+# \page License
+#
+# Subject to your compliance with these terms, you may use Microchip
+# software and any derivatives exclusively with Microchip products.
+# It is your responsibility to comply with third party license terms applicable
+# to your use of third party software (including open source software) that
+# may accompany Microchip software.
+#
+# THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES,
+# WHETHER EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE,
+# INCLUDING ANY IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY,
+# AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL MICROCHIP BE
+# LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, INCIDENTAL OR CONSEQUENTIAL
+# LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND WHATSOEVER RELATED TO THE
+# SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS BEEN ADVISED OF THE
+# POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE FULLEST EXTENT
+# ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY
+# RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
+# THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+#
+# \asf_license_stop
+#
+
+isp-runflags-y  :=
+
+# Should the device start executing after tool has done the requested work?
+ifeq ($(findstring run,$(MAKECMDGOALS)),run)
+isp-runflags-y  += start
+# Should the device be reset after tool has done the requested work?
+ifeq ($(findstring reset,$(MAKECMDGOALS)),reset)
+isp-runflags-y  += reset 0
+else
+isp-runflags-y  += noreset 0
+endif
+# Even though the device shouldn't run, should it be reset?
+else
+ifeq ($(findstring reset,$(MAKECMDGOALS)),reset)
+isp-runflags-y  += reset 0
+endif
+endif
+
+.PHONY: isp
+isp:
+# Intentionally left empty
+	@:
+
+.PHONY: unsupported_target
+unsupported_target:
+	@echo "The make targets '$(MAKECMDGOALS)' are unsupported by the" \
+		"BatchISP tool"
+
+# Perform a JTAG chip erase command (not supported by BatchISP)
+.PHONY: chiperase
+chiperase: unsupported_target
+
+# Get CPU information (not supported by BatchISP)
+.PHONY: cpuinfo
+cpuinfo: unsupported_target
+
+# Open a debug connection with the MCU
+.PHONY: debug
+debug: $(filter program,$(MAKECMDGOALS))
+	@echo $(MSG_DEBUGGING)
+	$(Q)$(GDBPROXY) $(FLASH:%=-f%)
+
+# Perform a flash chip erase
+.PHONY: erase
+erase:
+# The erase target should only be executed when program target is NOT given.
+ifeq ($(filter program,$(MAKECMDGOALS)),)
+	@echo $(MSG_ERASING)
+	$(Q)$(BATCHISP) $(ispflags-y) erase f memory flash blankcheck
+else
+	@:
+endif
+
+# Stop CPU execution (not supported by BatchISP)
+.PHONY: halt
+halt: unsupported_target
+
+# Program MCU memory from ELF output file
+.PHONY: program
+program: $(target)
+	@echo $(MSG_PROGRAMMING)
+# isp-runflags-y is not passed as arguments if flash should be secured in the
+# same go. The secureflash target will take care of reset and execution.
+ifeq ($(findstring secureflash,$(MAKECMDGOALS)),secureflash)
+	$(Q)$(BATCHISP) $(ispflags-y) erase f memory flash blankcheck loadbuffer $(target) program verify
+else
+	$(Q)$(BATCHISP) $(ispflags-y) erase f memory flash blankcheck loadbuffer $(target) program verify $(isp-runflags-y)
+endif
+
+# Reset MCU (not supported directly by BatchISP)
+.PHONY: reset
+reset:
+# Intentionally left empty
+	@:
+
+# Read CPU registers (not supported by BatchISP)
+.PHONY: readregs
+readregs: unsupported_target
+
+# Start CPU execution
+.PHONY: run
+run:
+# The run target should only be executed when program and secureflash targets
+# are NOT given.
+ifeq ($(filter program secureflash,$(MAKECMDGOALS)),)
+	@echo $(MSG_RUNNING)
+	$(Q)$(BATCHISP) $(ispflags-y) $(isp-runflags-y)
+else
+	@:
+endif
+
+# Protect chip by setting security bit
+.PHONY: secureflash
+# TODO: the secureflash target is not thread safe and should depend upon erase
+# and program if these goals are given to make. By adding these dependencies to
+# secureflash will cause make to print unnecessary "Nothing to be done for..."
+# messages.
+secureflash:
+	@echo $(MSG_SECURING_FLASH)
+	$(Q)$(BATCHISP) $(ispflags-y) memory security addrange 0x0 0x0 fillbuffer 0x01 program $(isp-runflags-y)
