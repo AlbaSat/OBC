@@ -11,6 +11,6 @@
 #ifndef CONF_BOARD_H
 #define CONF_BOARD_H
 
-#define FOSC0 28000000
+#define FOSC0 8000000
 
 #endif // CONF_BOARD_H
