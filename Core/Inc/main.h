@@ -31,10 +31,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "FreeRTOS.h"                   // ARM.FreeRTOS::RTOS:Core
-#include "task.h"                       // ARM.FreeRTOS::RTOS:Core
-#include "event_groups.h"               // ARM.FreeRTOS::RTOS:Event Groups
-#include "semphr.h"                     // ARM.FreeRTOS::RTOS:Core
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

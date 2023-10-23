@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -41,12 +42,12 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* Definitions for defaultTask */
-/*osThreadId_t defaultTaskHandle;
+osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
-};*/
+};
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -62,9 +63,6 @@ void StartDefaultTask(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-void vTask1(void *pvParameters);
-void vTask2(void *pvParameters);
 
 /* USER CODE END 0 */
 
@@ -101,6 +99,7 @@ int main(void)
   /* USER CODE END 2 */
 
   /* Init scheduler */
+  osKernelInitialize();
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
@@ -120,10 +119,10 @@ int main(void)
 
   /* Create the thread(s) */
   /* creation of defaultTask */
+  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  xTaskCreate(vTask1, "Task 1", 256, NULL, 1, NULL);
-  xTaskCreate(vTask2, "Task 2", 256, NULL, 1, NULL);
+  /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -131,20 +130,16 @@ int main(void)
   /* USER CODE END RTOS_EVENTS */
 
   /* Start scheduler */
+  osKernelStart();
 
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  vTaskStartScheduler();
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  /*HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
-	  HAL_Delay(1000);
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
-	  HAL_Delay(1000);*/
   }
   /* USER CODE END 3 */
 }
@@ -219,24 +214,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void vTask1(void *pvParameters)
-{
-	for(;;)
-	{
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		vTaskDelay(1000);
-	}
 
-}
-
-void vTask2(void *pvParameters)
-{
-	for(;;)
-	{
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		vTaskDelay(300);
-	}
-}
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -250,10 +228,10 @@ void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
-//  for(;;)
-//  {
-//    osDelay(1);
-//  }
+  for(;;)
+  {
+    osDelay(1);
+  }
   /* USER CODE END 5 */
 }
 
