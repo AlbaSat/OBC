@@ -4,64 +4,26 @@
 
 Temporary repo for OBC software development
 
-## Tutorial
+## Branches
 
-This tutorial shows how to setup a working Microchip Studio project with FreeRTOS 12.0.1 and ASF 
+The architecture chosen for the cubesat is AVR32.
+However, development for now will proceed for a stm32 architecture.
+Considering this choice, the repo has been devided into two branches: `microchi-studio` and `stm32`.
 
-Last tested: Sep. 15, 2023 
+The branch `microchip-studio` will be kept for future development and simulation of the AVR32 architecture.
+The branch `stm32` is currently used to develop the draft of the project with STM32CubeIDE.
 
- 
+## Start working on the project
 
-New Project → GCC C ASF Board Project 
+If you are new to the project you can start developing for stm32 cloning the repo and switching to the correct branch.
 
-Device Family → UC3L → AT32UC3L064 → User Board template - UC3 L0/L3U/L4U 
+If you don't have one already create a workspace for STM32CudeIDE.
+From inside the workspace clone the repo ad switch to the right branch running the following:
 
- 
-
-On ASF Wizard: Select project, then Add 
-
-- GPIO - General-Purpose Input/Output (driver) 
-- INTC - Interrupt Controller (driver) 
-- PM - Power Manager (driver) 
-- TC - Timer/Counter (driver) 
-- USART - Universal Synchronous/Asynchronous Receiver/Transmitter (driver) 
-- System Clock Control (service) 
-- Newlib optimization selector (library) (speed)
-
-and Apply 
-
- 
-
-In the project folder: 
-
-1. Create new folder "freertos" inside src/ASF/thirdparty/ 
-1. Create new folder "freertos-12.0.1" inside src/ASF/thirdparty/freertos/ 
-1. Copy the Source folder from the "FreeRTOS" folder within the FreeRTOS distribution to src/ASF/thirdparty/freertos/ 
-1. In the Source/portable/ folder, only keep GCC folder, MemMang folder and the text files 
-1. In the GCC folder, only keep the AVR32_UC3 folder 
-1. In MemMang, only keep heap_3 file 
-1. Inside src/config/ paste a FreeRTOSConfig.h file gotten from an example project
- 
-
-From Solution Explorer: Show all -> Right Click, Include In Project the Source folder just added and the FreeRTOSConfig.h file 
-
-### important step 
-
-NOW File -> Save
-
-All BECAUSE THE NEXT STEP IS HEAVY FOR MICROCHIP STUDIO, IT MIGHT CRASH IN THE PROCESS! 
-
-In Project Properties: Toolchain -> AVR32/GNU C Compiler -> Directories -> Include paths for the freertos-12.0.1/Source/include folder and the freertos-12.0.1/Source/portable/GCC/AVR32_UC3 folder 
-
-## Last edits
-
-Apply some changes to the code:
-
-- line 73 in Source/portable/GCC/AVR32_UC3/port.c to #include "nlao_cpu.h" 
-- line 74 in Source/portable/GCC/AV32_UC3/port.c to #include "nlao_usart.h" 
-- line 68 in src/config/FreeRTOSConfig.h removing the cast (#define configMAX_PRIORITIES     ( 8 )) 
-- flag at line 91 in src/config/FreeRTOSConfig.h to 1 (#define INCLUDE_xTaskGetCurrentTaskHandle 1) 
-- Comment the whole "Constant data area" at the end of the Source/portable/GCC/AVR32_UC3/exception.S file (it is already defined in the int.c file) 
-- change both instances of INT0 at lines 443 and 460 of Source/portable/GCC/AV32_UC3/port.c to AVR32_INTC_INT0 
-- Define FOSC0 in the config/conf_board.h file and set it to the desired clock frequency 
-- Remove ASF/avr32/drivers/intc/Exception.S file from the project or delete it 
+```bash
+git clone https://github.com/AlbaSat/OBC.git
+git switch stm32
+```
+After cloining the repo, you can open the IDE and import the project from:
+File -> import -> General -> "Import an Existing ... (.ioc)"
+Select OBC.ioc from the OBC folder inside the workspace and you should be good to go.
