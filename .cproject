@@ -82,10 +82,10 @@
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
-						<entry excluding="Third_Party/Lab-Project-FreeRTOS-FAT/test|Third_Party/Lab-Project-FreeRTOS-FAT/portable|Third_Party/FreeRTOS-Kernel/examples|Third_Party/FreeRTOS-Kernel/portable|Third_Party/FreeRTOS-Kernel/portable/ThirdParty|Third_Party/FreeRTOS-Kernel/portable/ThirdParty/GCC/Xtensa_ESP32|Third_Party/FreeRTOS-Kernel/portable/ThirdParty/XCC|Third_Party/FreeRTOS-Kernel/portable/WizC|Third_Party/FreeRTOS-Kernel/portable/ThirdParty/xClang|Third_Party/FreeRTOS-Kernel/portable/oWatcom" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
+						<entry excluding="Third_Party/Lab-Project-FreeRTOS-FAT/ff_dev_support.c|Third_Party/Lab-Project-FreeRTOS-FAT/test|Third_Party/Lab-Project-FreeRTOS-FAT/portable|Third_Party/FreeRTOS-Kernel/examples|Third_Party/FreeRTOS-Kernel/portable|Third_Party/FreeRTOS-Kernel/portable/ThirdParty|Third_Party/FreeRTOS-Kernel/portable/ThirdParty/GCC/Xtensa_ESP32|Third_Party/FreeRTOS-Kernel/portable/ThirdParty/XCC|Third_Party/FreeRTOS-Kernel/portable/WizC|Third_Party/FreeRTOS-Kernel/portable/ThirdParty/xClang|Third_Party/FreeRTOS-Kernel/portable/oWatcom" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares/Third_Party/FreeRTOS-Kernel/portable/GCC/ARM_CM4F"/>
 						<entry excluding="heap_5.c|heap_4.c|heap_2.c|heap_1.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares/Third_Party/FreeRTOS-Kernel/portable/MemMang"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT/portable/STM32F4xx"/>
+						<entry excluding="ff_sddisk.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT/portable/STM32F4xx"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT/portable/common"/>
 					</sourceEntries>
 				</configuration>
@@ -168,10 +168,10 @@
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
-						<entry excluding="Third_Party/Lab-Project-FreeRTOS-FAT/test|Third_Party/Lab-Project-FreeRTOS-FAT/portable|Third_Party/FreeRTOS-Kernel/examples|Third_Party/FreeRTOS-Kernel/portable|Third_Party/FreeRTOS-Kernel/portable/ThirdParty|Third_Party/FreeRTOS-Kernel/portable/ThirdParty/GCC/Xtensa_ESP32|Third_Party/FreeRTOS-Kernel/portable/ThirdParty/XCC|Third_Party/FreeRTOS-Kernel/portable/WizC|Third_Party/FreeRTOS-Kernel/portable/ThirdParty/xClang|Third_Party/FreeRTOS-Kernel/portable/oWatcom" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
+						<entry excluding="Third_Party/Lab-Project-FreeRTOS-FAT/ff_dev_support.c|Third_Party/Lab-Project-FreeRTOS-FAT/test|Third_Party/Lab-Project-FreeRTOS-FAT/portable|Third_Party/FreeRTOS-Kernel/examples|Third_Party/FreeRTOS-Kernel/portable|Third_Party/FreeRTOS-Kernel/portable/ThirdParty|Third_Party/FreeRTOS-Kernel/portable/ThirdParty/GCC/Xtensa_ESP32|Third_Party/FreeRTOS-Kernel/portable/ThirdParty/XCC|Third_Party/FreeRTOS-Kernel/portable/WizC|Third_Party/FreeRTOS-Kernel/portable/ThirdParty/xClang|Third_Party/FreeRTOS-Kernel/portable/oWatcom" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares/Third_Party/FreeRTOS-Kernel/portable/GCC/ARM_CM4F"/>
 						<entry excluding="heap_5.c|heap_4.c|heap_2.c|heap_1.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares/Third_Party/FreeRTOS-Kernel/portable/MemMang"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT/portable/STM32F4xx"/>
+						<entry excluding="ff_sddisk.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT/portable/STM32F4xx"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT/portable/common"/>
 					</sourceEntries>
 				</configuration>
