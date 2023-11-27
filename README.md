@@ -23,6 +23,8 @@ From inside the workspace clone the repo ad switch to the right branch running t
 ```bash
 git clone https://github.com/AlbaSat/OBC.git
 git switch stm32
+git submodule init
+git submodule update
 ```
 After cloining the repo, you can open the IDE and import the project from:
 File -> import -> General -> "Import an Existing ... (.ioc)"
