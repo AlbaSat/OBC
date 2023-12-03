@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "task_gianluca.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -123,6 +124,7 @@ int main(void)
 
   xTaskCreate(vTask1, "Task 1", 256, NULL, 1, NULL);
   xTaskCreate(vTask2, "Task 2", 256, NULL, 1, NULL);
+  xTaskCreate(vTaskGianluca, "Task Gianluca", 256, NULL, 1, NULL);
   vTaskStartScheduler();
 
   /* USER CODE END RTOS_THREADS */
