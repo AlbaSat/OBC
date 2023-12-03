@@ -18,10 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include <task1_ale.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,7 +56,7 @@ static void MX_USART2_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-void vTask1(void *pvParameters);
+
 void vTask2(void *pvParameters);
 
 
@@ -252,17 +250,6 @@ int _write(int fd, char * ptr, int len)
 	return len;
 }
 
-void vTask1(void *pvParameters)
-{
-	for(;;)
-	{
-		printf("Task1\n\r");
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_14);
-		vTaskDelay(1000);
-	}
-
-}
 
 void vTask2(void *pvParameters)
 {
