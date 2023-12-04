@@ -254,6 +254,15 @@ int _write(int fd, char * ptr, int len)
 	return len;
 }
 
+void vTask1(void *pvParameters)
+{
+	for(;;)
+	{
+		printf("Task1\n\r");
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		vTaskDelay(1000);
+	}
+}
 
 void vTask2(void *pvParameters)
 {
