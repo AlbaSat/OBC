@@ -60,7 +60,7 @@ static void MX_USART2_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-
+void vTask1(void *pvParameters);
 void vTask2(void *pvParameters);
 
 
