@@ -20,6 +20,10 @@
 #include "task1_ale.h"
 #include "main.h"
 #include <stdio.h>
+
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
