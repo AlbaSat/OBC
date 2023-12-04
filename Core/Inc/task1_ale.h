@@ -8,6 +8,6 @@
 #ifndef INC_TASK1_ALE_H_
 #define INC_TASK1_ALE_H_
 
-void vTask1(void *pvParameters);
+void vTaskAle(void *pvParameters);
 
 #endif /* INC_TASK1_ALE_H_ */
