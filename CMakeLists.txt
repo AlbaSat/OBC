@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
+include(FetchContent)
 
-
-##### BASE PROJECT CONFIG
-# specify cross-compilers and tools
 set(CMAKE_C_COMPILER arm-none-eabi-gcc)
 set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
 set(CMAKE_ASM_COMPILER arm-none-eabi-gcc)
@@ -13,37 +11,51 @@ set(SIZE arm-none-eabi-size)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 
-project(obc)
+# project settings
+project(OBC C CXX ASM)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_STANDARD 11)
 
-file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/*.*" )
+########################################################################################################################
+#################################################FreeRTOS###############################################################
 
-add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
+# Link: https://github.com/FreeRTOS/FreeRTOS-Kernel
+FetchContent_Declare( freertos_kernel
+        GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+        GIT_TAG        main #Note: Best practice to use specific git-hash or tagged version
+)
 
-
-set(HEX_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
-set(BIN_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin)
-
-target_link_libraries(${PROJECT_NAME}.elf freertos_kernel freertos_config)
-
-# Linker
-
-set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F411RETX_FLASH.ld)
-add_link_options(-Wl,-gc-sections,--print-memory-usage,-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map)
-add_link_options(-mcpu=cortex-m4 -mthumb -mthumb-interwork)
-add_link_options(-T ${LINKER_SCRIPT})
-
-
-##### FREERTOS
-
-set(FREERTOS_KERNEL_PATH "Middlewares/Third_Party/FreeRTOS-Kernel")
-
-# Add the freertos_config for FreeRTOS-Kernel
 add_library(freertos_config INTERFACE)
 
-target_include_directories(freertos_config
+target_include_directories(freertos_config SYSTEM
         INTERFACE
         Core/Inc
 )
+
+target_compile_definitions(freertos_config
+        INTERFACE
+        projCOVERAGE_TEST=0
+)
+
+set( FREERTOS_HEAP "4" CACHE STRING "" FORCE)
+# Select the native compile PORT
+#set( FREERTOS_PORT "GCC_POSIX" CACHE STRING "" FORCE)
+
+# If we set FREERTOS_PORT to GCC_POSIX, make throws an error about PTHREAD_ONCE_INIT
+# If we don't set it, make throws and error about some weird conversion from `long unsigned in` to `UBaseType_t` (`unsigned char`)
+# If we set it to GCC_ARM_CM4F it complains about some lacking registers in ARM mode
+set(FREERTOS_PORT "GCC_POSIX" CACHE STRING "" FORCE)
+
+# Select the cross-compile PORT
+if (CMAKE_CROSSCOMPILING)
+    set(FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
+endif()
+
+FetchContent_MakeAvailable(freertos_kernel)
+
+target_compile_definitions(freertos_config INTERFACE ${definitions})
+target_compile_options(freertos_config INTERFACE ${options})
+
 
 # Select the heap port.  values between 1-4 will pick a heap.
 set(FREERTOS_HEAP "4" CACHE STRING "" FORCE)
@@ -52,7 +64,7 @@ set(FREERTOS_HEAP "4" CACHE STRING "" FORCE)
 set(FREERTOS_PORT "TEMPLATE" CACHE STRING "" FORCE)
 
 # Adding the FreeRTOS-Kernel subdirectory
-add_subdirectory(${FREERTOS_KERNEL_PATH} FreeRTOS-Kernel)
+#add_subdirectory(${FREERTOS_KERNEL_PATH} FreeRTOS-Kernel)
 
 ########################################################################
 # Overall Compile Options
@@ -94,11 +106,16 @@ target_compile_options(freertos_kernel PRIVATE
         $<$<COMPILE_LANG_AND_ID:C,Clang>:-Wno-cast-align> )
 
 
+########################################################################################################################
+############################################FAT#######################################################################
 
-##### FAT
+FetchContent_Declare( freertos_plus_fat
+        GIT_REPOSITORY https://github.com/FreeRTOS/Lab-Project-FreeRTOS-FAT.git
+        GIT_TAG        main #Note: Best practice to use specific git-hash or tagged version
+        GIT_SUBMODULES "" # Don't grab any submodules since not latest
+)
 
-set(FREERTOS_FAT_PATH "Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT")
-
+# ...
 
 set( FREERTOS_PLUS_FAT_DEV_SUPPORT OFF CACHE BOOL "" FORCE)
 # Select the native compile PORT
@@ -106,9 +123,36 @@ set( FREERTOS_PLUS_FAT_PORT "POSIX" CACHE STRING "" FORCE)
 # Select the cross-compile PORT
 if (CMAKE_CROSSCOMPILING)
     # Eg. Zynq 2019_3 version of port
-    set(FREERTOS_PLUS_FAT_PORT "ZYNQ_2019_3" CACHE STRING "" FORCE)
+    set(FREERTOS_PLUS_FAT_PORT "STM32F4xx" CACHE STRING "" FORCE)
 endif()
 
+FetchContent_MakeAvailable(freertos_plus_fat)
 
-# Including FAT make the compilation really long
-#add_subdirectory(${FREERTOS_FAT_PATH} FreeRTOS-FAT)
+########################################################################################################################
+
+
+file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/CMSIS/*.*" "Drivers/STM32F4xx_HAL_Driver/*.*" )
+set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F411RETX_FLASH.ld)
+
+add_link_options(-Wl,-gc-sections,--print-memory-usage,-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map)
+add_link_options(-mcpu=cortex-m4 -mthumb -mthumb-interwork)
+add_link_options(-T ${LINKER_SCRIPT})
+
+include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc
+        Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
+        Drivers/CMSIS/Device/ST/STM32F4xx/Include
+        Drivers/CMSIS/Include
+)
+
+set(CMAKE_THREAD_PREFER_PTHREAD FALSE)
+set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard")
+set(CMAKE_C_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections ${CMAKE_C_FLAGS}")
+set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} ${CMAKE_ASM_FLAGS}")
+
+
+add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
+add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE)
+set(HEX_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
+set(BIN_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin)
+
+target_link_libraries(${PROJECT_NAME}.elf freertos_kernel freertos_config freertos_plus_fat)
