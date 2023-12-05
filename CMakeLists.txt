@@ -10,13 +10,34 @@ set(CMAKE_OBJDUMP arm-none-eabi-objdump)
 set(SIZE arm-none-eabi-size)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
+#SET(LOCAL_ARM_TOOLCHAIN /usr/bin/arm-none-eabi-gcc)
 
 # project settings
 project(OBC C CXX ASM)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 17)
 
 ########################################################################################################################
+
+
+
+file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/*.*" )
+set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F411RETX_FLASH.ld)
+
+add_link_options(-Wl,-gc-sections,--print-memory-usage,-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map)
+#add_link_options(-mcpu=cortex-m4 -mthumb -mthumb-interwork -mfloat-abi=hard -mfpu=fpv4-sp-d16 -specs=nano.specs -specs=nosys.specs)
+add_link_options(-T ${LINKER_SCRIPT})
+
+include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc
+        Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
+        Drivers/CMSIS/Device/ST/STM32F4xx/Include
+        Drivers/CMSIS/Include
+)
+
+set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs -specs=nosys.specs")
+set(CMAKE_C_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections ${CMAKE_C_FLAGS}")
+set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} ${CMAKE_ASM_FLAGS}")
+
 #################################################FreeRTOS###############################################################
 
 # Link: https://github.com/FreeRTOS/FreeRTOS-Kernel
@@ -37,14 +58,14 @@ target_compile_definitions(freertos_config
         projCOVERAGE_TEST=0
 )
 
-set( FREERTOS_HEAP "4" CACHE STRING "" FORCE)
+set(FREERTOS_HEAP "4" CACHE STRING "" FORCE)
 # Select the native compile PORT
 #set( FREERTOS_PORT "GCC_POSIX" CACHE STRING "" FORCE)
 
 # If we set FREERTOS_PORT to GCC_POSIX, make throws an error about PTHREAD_ONCE_INIT
 # If we don't set it, make throws and error about some weird conversion from `long unsigned in` to `UBaseType_t` (`unsigned char`)
 # If we set it to GCC_ARM_CM4F it complains about some lacking registers in ARM mode
-set(FREERTOS_PORT "GCC_POSIX" CACHE STRING "" FORCE)
+set(FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
 
 # Select the cross-compile PORT
 if (CMAKE_CROSSCOMPILING)
@@ -103,7 +124,22 @@ target_compile_options(freertos_kernel PRIVATE
         $<$<COMPILE_LANG_AND_ID:C,Clang>:-Wno-padded>
         $<$<COMPILE_LANG_AND_ID:C,Clang>:-Wno-missing-variable-declarations>
         $<$<COMPILE_LANG_AND_ID:C,Clang>:-Wno-covered-switch-default>
-        $<$<COMPILE_LANG_AND_ID:C,Clang>:-Wno-cast-align> )
+        $<$<COMPILE_LANG_AND_ID:C,Clang>:-Wno-cast-align>
+
+
+        -mcpu=cortex-m7
+        -mthumb
+        -mfpu=fpv5-sp-d16
+        -mfloat-abi=hard
+
+        -fdata-sections
+        -ffunction-sections
+        -fno-strict-aliasing
+
+        -Wall
+
+        $<$<CONFIG:Debug>:-Og>
+)
 
 
 ########################################################################################################################
@@ -129,25 +165,6 @@ endif()
 FetchContent_MakeAvailable(freertos_plus_fat)
 
 ########################################################################################################################
-
-
-file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/CMSIS/*.*" "Drivers/STM32F4xx_HAL_Driver/*.*" )
-set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F411RETX_FLASH.ld)
-
-add_link_options(-Wl,-gc-sections,--print-memory-usage,-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map)
-add_link_options(-mcpu=cortex-m4 -mthumb -mthumb-interwork)
-add_link_options(-T ${LINKER_SCRIPT})
-
-include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc
-        Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
-        Drivers/CMSIS/Device/ST/STM32F4xx/Include
-        Drivers/CMSIS/Include
-)
-
-set(CMAKE_THREAD_PREFER_PTHREAD FALSE)
-set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard")
-set(CMAKE_C_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections ${CMAKE_C_FLAGS}")
-set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} ${CMAKE_ASM_FLAGS}")
 
 
 add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
