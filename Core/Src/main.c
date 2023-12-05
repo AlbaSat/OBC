@@ -17,7 +17,6 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include "task1_ale.h"
 #include "task_gianluca.h"
 #include "main.h"
 #include <stdio.h>

@@ -111,7 +111,6 @@ if (CMAKE_CROSSCOMPILING)
 endif ()
 
 FetchContent_MakeAvailable(freertos_plus_fat)
-FetchContent_MakeAvailable(freertos_plus_fat)
 
 # Define target
 add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
