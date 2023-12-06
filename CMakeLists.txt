@@ -70,6 +70,7 @@ include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc
 set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs -specs=nosys.specs")
 set(CMAKE_C_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections ${CMAKE_C_FLAGS}")
 set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} ${CMAKE_ASM_FLAGS}")
+add_compile_options(-g -ggdb)
 
 # Fetch FreeRTOS
 FetchContent_Declare(freertos_kernel
