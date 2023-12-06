@@ -1,6 +1,9 @@
 # Set the minimum required version of CMake
 cmake_minimum_required(VERSION 3.15)
 
+# Set the target system for cross compilation
+set(CMAKE_SYSTEM_NAME Generic)
+
 # Set compilers
 set(CMAKE_C_COMPILER arm-none-eabi-gcc)
 set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
@@ -103,11 +106,11 @@ FetchContent_Declare(freertos_plus_fat
 
 set(FREERTOS_PLUS_FAT_DEV_SUPPORT OFF CACHE BOOL "" FORCE)
 # Select the native compile PORT
-set(FREERTOS_PLUS_FAT_PORT "POSIX" CACHE STRING "" FORCE)
+set(FREERTOS_PLUS_FAT_PORT POSIX CACHE STRING "")
 # Select the cross-compile PORT
 if (CMAKE_CROSSCOMPILING)
     # Eg. Zynq 2019_3 version of port
-    set(FREERTOS_PLUS_FAT_PORT "STM32F4xx" CACHE STRING "" FORCE)
+    set(FREERTOS_PLUS_FAT_PORT STM32F4xx CACHE STRING "")
 endif ()
 
 FetchContent_MakeAvailable(freertos_plus_fat)
