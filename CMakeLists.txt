@@ -69,6 +69,7 @@ include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc
 # Set common flags
 set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs -specs=nosys.specs")
 set(CMAKE_C_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections ${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections ${CMAKE_CXX_FLAGS}")
 set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} ${CMAKE_ASM_FLAGS}")
 add_compile_options(-g -ggdb)
 
@@ -91,7 +92,7 @@ target_compile_definitions(freertos_config
         projCOVERAGE_TEST=0
 )
 
-set(FREERTOS_HEAP "4" CACHE STRING "" FORCE)
+set(FREERTOS_HEAP "3" CACHE STRING "" FORCE)
 set(FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
 
 target_compile_definitions(freertos_config INTERFACE ${definitions})
@@ -101,7 +102,7 @@ FetchContent_MakeAvailable(freertos_kernel)
 # Fetch FreeRTOS+FAT
 FetchContent_Declare(freertos_plus_fat
         GIT_REPOSITORY https://github.com/FreeRTOS/Lab-Project-FreeRTOS-FAT.git
-        GIT_TAG 086960fd749b638afd0985ec94e183281319c4c2 #Note: Best practice to use specific git-hash or tagged version
+        GIT_TAG 25129e5221ae6ebf9d88e11f78d33c68edb254fb #Note: Best practice to use specific git-hash or tagged version
         GIT_SUBMODULES "" # Don't grab any submodules since not latest
 )
 
