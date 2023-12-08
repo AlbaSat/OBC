@@ -14,6 +14,10 @@ This project is a firmware for STM32F411RE microcontroller. It uses FreeRTOS as 
 - GNU Arm Embedded Toolchain
 - ST-Link utility from [here](https://github.com/stlink-org/stlink).
 
+#### Arch Linux
+On Arch Linux installing `arm-none-eabi-gcc` doesn't install the whole toolcahin and leads to compilation issues.
+You should also install `arm-none-eabi-newlib`
+
 #### MacOs
 On macOs installing `arm-none-eabi-gcc` doesn't install the whole toolchain and leads to compilation issues.
 You should instead install:
