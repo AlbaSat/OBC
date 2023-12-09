@@ -13,7 +13,7 @@ void vTaskAle(void *pvParameters)
 	{
 		printf("Task1\n\r");
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_14);
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
 		vTaskDelay(1000);
 	}
 
