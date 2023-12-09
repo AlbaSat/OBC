@@ -10,7 +10,7 @@ This project is a firmware for STM32F411RE microcontroller. It uses FreeRTOS as 
 ## Building the Project
 
 ### Dependencies
-- CMake 3.10 or higher
+- CMake 3.11 or higher
 - GNU Arm Embedded Toolchain
 - ST-Link utility from [here](https://github.com/stlink-org/stlink).
 
