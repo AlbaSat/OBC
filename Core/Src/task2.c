@@ -7,31 +7,51 @@
 
 #include "task2.h"
 
-void vTask2(void *pvParameters){
+void vTask_bea_2(void *pvParameters){
 
-	const char foo[] = "Prova";
-	int fooSize = sizeof(foo)* sizeof(char);
-	char readString[fooSize];
-	const char fileName[] = "newFile";
+	const char *filepath = "/foodir/files/newfile.txt";
+	const char foo[] = "Hello world!";
+	size_t foo_size = sizeof(foo)* sizeof(char);
+	char readString[foo_size];
 
-	//	open a new file
-	FF_FILE *pxCurrentFile = ff_fopen(fileName, "w");
+	//create a new directory
+	ff_mkdir("/foodir/files");
 
-	ff_fwrite(foo, fooSize, 1, pxCurrentFile);
+	//	open a new file and see if it is open correctly
+	FF_FILE *pxCurrentFile = ff_fopen(filepath, "w");
 
-	/*	rewind to the start of file	*/
-	ff_rewind(pxCurrentFile);
+	if(pxCurrentFile){
 
-	/*	reads from file and save into a buffer*/
-	ff_fgets(readString,fooSize,pxCurrentFile);
+		ff_fwrite(foo, foo_size, 1, pxCurrentFile);
 
-	ff_fclose(pxCurrentFile);
+		/*	rewind to the start of file	*/
+		ff_rewind(pxCurrentFile);
 
-	if(FF_strmatch(readString, foo, fooSize) == pdTRUE){
-		result = 1;
+		/*	reads from file and save into a buffer*/
+		ff_fgets(readString,foo_size,pxCurrentFile);
+
+		ff_fclose(pxCurrentFile);
+
+		if(FF_strmatch(readString, foo, foo_size) == pdTRUE){
+			printf("Successful file-writing procedure\n");
+		}
+		else /*	FF_strmatch(readString, foo, fooSize) == pdTrue	*/{
+			printf("Unsuccessful file-writing procedure: the message was nt written correctly\n");
+		}
 	}
-	else /*	FF_strmatch(readString, foo, fooSize) == pdTrue	*/{
-		result = 0;
+	else /* if pxCurrent == NULL */{
+		int error_value = stdioGET_ERRNO();
+
+		switch(error_value){
+
+		case pdFREERTOS_ERRNO_ENOENT:
+			printf("ERROR: file does not exist\n");
+
+		case pdFREERTOS_ERRNO_EACCES:
+			printf("ERROR: permission denied\n");
+		}
+
+		perror("File could not be opened\n");
 	}
 
 

@@ -12,15 +12,16 @@
 extern "C" {
 #endif
 
-/*	Libraries included from FreeRTOS FAT	*/
-
-#include "../../Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT/include/ff_stdio.h"
+#include "ff_headers.h"
+#include "ff_stdio.h"
 #include "FreeRTOSConfig.h"
 
-static int result;
-
-/*	Function's declaration	*/
-void vTask2(void *pvParameters);
+/**
+ * @brief creates, writes and checks if the message is written correctly
+ * in case of errors ecountered opening the file prints the nature of the error
+ * itself
+ * */
+void vTask_bea_2(void *pvParameters);
 
 #ifdef __cplusplus
 }
