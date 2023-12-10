@@ -10,8 +10,8 @@
 
 #define RAMDISK_NAME "ram_ale"
 #define RAMDISK_SECTOR_SIZE 512
-#define RAMDISK_SECTOR_COUNT 32
-#define IOMAN_CACHE_SIZE (RAMDISK_SECTOR_SIZE * 10UL)
+#define RAMDISK_SECTOR_COUNT 8
+#define IOMAN_CACHE_SIZE (RAMDISK_SECTOR_SIZE * 8)
 
 void vTaskAle(void *pvParameters);
 

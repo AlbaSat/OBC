@@ -17,6 +17,8 @@ void vTaskAle(void *pvParameters)
 	disk_ale = FF_RAMDiskInit(RAMDISK_NAME,//
 			buffer_ale, RAMDISK_SECTOR_COUNT,//
 			IOMAN_CACHE_SIZE);
+	//TODO: disk gets created and partitioned correctly, but not formatted and consequently
+	//not mounted correctly; following code does not work.
 
 	//Create directory inside RAM disk
 	int dir_ok = 0;
@@ -29,6 +31,9 @@ void vTaskAle(void *pvParameters)
 	char * hello = "Hello, World!";
 	ff_fwrite(hello, strlen(hello), 1, file_ale);
 	ff_fclose(file_ale);
+
+	pcRAMBuffer = (char *) pvPortMalloc(512);
+
 
 	for(;;)
 	{
