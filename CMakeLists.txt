@@ -73,8 +73,8 @@ include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc
 
 # Set common flags
 set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs -specs=nosys.specs")
-set(CMAKE_C_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections ${CMAKE_C_FLAGS}")
-set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections ${CMAKE_CXX_FLAGS}")
+set(CMAKE_C_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections -DTASK_PRIORITY=0 ${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections -DTASK_PRIORITY=0 ${CMAKE_CXX_FLAGS}")
 set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} ${CMAKE_ASM_FLAGS}")
 add_compile_options(-g -ggdb)
 
