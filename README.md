@@ -100,8 +100,8 @@ xpm install @xpack-dev-tools/qemu-arm@latest
 # Check if the installation was successful, and qemu-system-gnuarmeclipse is installed
 xpacks/.bin/qemu-system-gnuarmeclipse --version
 
-# Run the project
-xpacks/.bin/qemu-system-gnuarmeclipse -cpu cortex-m4 -machine STM32F4-Discovery -gdb tcp::3333 -kernel build/OBC.elf
+# Run the project, please read the note below for more details about the FPU and CPU
+xpacks/.bin/qemu-system-gnuarmeclipse -cpu cortex-m3 -machine STM32F4-Discovery -gdb tcp::3333 -kernel build/OBC.elf
 ```
 
 To debug using gdb, run the following commands from another terminal:
@@ -117,6 +117,15 @@ Note: qemu-system-gnuarmeclipse doesn't support the FPU, so we need to comment t
     SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
   #endif
  ```
+on top of that we need to change the compiler flags in the CMakeLists.txt file to:
+```cmake
+#from this
+set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs -specs=nosys.specs")
+# to this
+set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -specs=nano.specs -specs=nosys.specs")
+```
+However the port of FreeRTOS (GCC_ARM_CM4F) that we are using cannot compile without the FPU, so we need to change it to GCC_ARM_CM3 for qemu-system-gnuarmeclipse to work.
+
 ### Contributing
 
 TODO

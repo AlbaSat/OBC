@@ -72,7 +72,8 @@ include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc
 )
 
 # Set common flags
-set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs -specs=nosys.specs")
+#set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs -specs=nosys.specs")
+set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -specs=nano.specs -specs=nosys.specs")
 set(CMAKE_C_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections -DTASK_PRIORITY=0 ${CMAKE_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections -DTASK_PRIORITY=0 ${CMAKE_CXX_FLAGS}")
 set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} ${CMAKE_ASM_FLAGS}")
@@ -98,7 +99,7 @@ target_compile_definitions(freertos_config
 )
 
 set(FREERTOS_HEAP "3" CACHE STRING "" FORCE)
-set(FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
+set(FREERTOS_PORT "GCC_ARM_CM3" CACHE STRING "" FORCE) # GCC_ARM_CM3 for QEMU build, GCC_ARM_CM4F for STM32F4
 
 target_compile_definitions(freertos_config INTERFACE ${definitions})
 target_compile_options(freertos_config INTERFACE ${options})
