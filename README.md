@@ -77,6 +77,46 @@ following commands can be used to run the project with QEMU:
 qemu-system-arm -M olimex-stm32-h405  -kernel OBC.elf -d in_asm -smp 1
 ```
 
+### Running the proejct using qemu-system-gnuarmeclipse
+
+Dependencies:
+
+- Node.js
+- NPM
+
+From the root of the project run the following commands:
+
+```shell
+# Install XPM
+npm install --global xpm@latest
+
+# Check the installation
+xpm --version
+
+# Install Qemu-arm and Qemu-system-gnuarmeclipse
+xpm init
+xpm install @xpack-dev-tools/qemu-arm@latest 
+
+# Check if the installation was successful, and qemu-system-gnuarmeclipse is installed
+xpacks/.bin/qemu-system-gnuarmeclipse --version
+
+# Run the project
+xpacks/.bin/qemu-system-gnuarmeclipse -cpu cortex-m4 -machine STM32F4-Discovery -gdb tcp::3333 -kernel build/OBC.elf
+```
+
+To debug using gdb, run the following commands from another terminal:
+
+```shell
+gdb -q build/OBC.elf  -ex "target remote:3333"
+```
+
+
+Note: qemu-system-gnuarmeclipse doesn't support the FPU, so we need to comment the following lines in the system_stm32f4xx.c file:
+```c
+  #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
+    SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
+  #endif
+ ```
 ### Contributing
 
 TODO

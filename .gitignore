@@ -6,3 +6,7 @@ build/
 cmake-build-debug
 .vscode
 .metadata
+
+# Ignore XPM package directory
+xpacks/
+package.json
