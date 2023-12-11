@@ -25,6 +25,9 @@ include(FetchContent)
 # Define sources and linker script
 #file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/*.*")
 set(SOURCES
+        # Core/Startup
+        Core/Startup/startup_stm32f411retx.s
+
         # Core/Src/
         Core/Src/freertos.c
         Core/Src/main.c
@@ -34,6 +37,7 @@ set(SOURCES
         Core/Src/sysmem.c
         Core/Src/system_stm32f4xx.c
         Core/Src/vTask1.c
+        Core/Src/task_gianluca.c
 
         # Drivers/STM32F4xx_HAL_Driver/Src/
         Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
@@ -50,6 +54,7 @@ set(SOURCES
         Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c
         Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c
         Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
+
 
 )
 
