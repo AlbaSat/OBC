@@ -74,7 +74,7 @@ following commands can be used to run the project with QEMU:
 - `qemu-system`
 
 ```shell
-qemu-system-arm -M olimex-stm32-h405  -kernel OBC.elf  OBC.map -d in_asm -smp 1
+qemu-system-arm -M olimex-stm32-h405  -kernel OBC.elf -d in_asm -smp 1
 ```
 
 ### Contributing

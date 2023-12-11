@@ -5,3 +5,4 @@ OBC Debug.launch
 build/
 cmake-build-debug
 .vscode
+.metadata
