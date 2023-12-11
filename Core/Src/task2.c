@@ -9,6 +9,10 @@
 
 void vTask_bea_2(void *pvParameters){
 
+	/*	create RAM disk*/
+	static uint8_t buffer_bea [RAM_DISK_SECTOR_SIZE*RAM_DISK_SECTOR_COUNT] = {0};
+	FF_Disk_t *disk_bea = FF_RAMDiskInit(RAM_DISK_NAME, buffer_bea, RAM_DISK_SECTOR_COUNT, IOMAN_CACHE_SIZE);
+
 	const char *filepath = "/foodir/files/newfile.txt";
 	const char foo[] = "Hello world!";
 	size_t foo_size = sizeof(foo)* sizeof(char);

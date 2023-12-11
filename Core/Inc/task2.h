@@ -16,6 +16,10 @@ extern "C" {
 #include "ff_stdio.h"
 #include "FreeRTOSConfig.h"
 
+#define RAM_DISK_NAME "ram_bea"
+#define RAM_DISK_SECTOR_SIZE 512
+#define RAM_DISK_SECTOR_COUNT 8
+#define IOMAN_CACHE_SIZE (RAM_DISK_SECTOR_SIZE*8)
 /**
  * @brief creates, writes and checks if the message is written correctly
  * in case of errors ecountered opening the file prints the nature of the error
