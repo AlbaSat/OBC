@@ -123,9 +123,9 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
 
+  //xTaskCreate(vTask1, "Task 1", 256, NULL, 1, NULL);
+  //xTaskCreate(vTask2, "Task 2", 256, NULL, 1, NULL);
   xTaskCreate(vTaskFATInit, "Task FAT Init", 256, NULL, 1, NULL);
-  xTaskCreate(vTask1, "Task 1", 256, NULL, 1, NULL);
-  xTaskCreate(vTask2, "Task 2", 256, NULL, 1, NULL);
   vTaskStartScheduler();
 
   /* USER CODE END RTOS_THREADS */

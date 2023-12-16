@@ -6,6 +6,8 @@ extern "C" {
 #endif
 
 #include "ff_stdio.h"
+#include "ff_headers.h"
+#include "ff_ramdisk.h"
 
 void vTaskFATInit(void *pvParameters);
 

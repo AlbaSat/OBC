@@ -1,56 +1,19 @@
 #include <stdio.h>
+#include <stdint.h>
 
 #include "task_fat_init.h"
 
-#define RAMDISK_NAME "ramdisk"
-#define RAMDISK_SECTOR_SIZE 512
-#define RAMDISK_SECTORS 64
-#define IOMANAGER_CACHE_SIZE (RAMDISK_SECTOR_SIZE * 15UL)
-
-static void read_write_file(void) {
-    const char *filepath = "/ramdisk/files/testfile.txt";
-    const char *message = "Hello, Space!";
-    char buffer[32] = {0};
-    size_t message_size = sizeof(message);
-
-    ff_mkdir("/ramdisk/files");
-
-    FF_FILE *file = ff_fopen(filepath, "w");
-    if (!file) {
-        printf("ERROR: Unable to open file: %s\n\r", filepath);
-        return;
-    }
-
-    size_t written = ff_fwrite(message, 1, message_size, file);
-    if (written < message_size) {
-        printf("ERROR: Expected to write %zu but written %zu\n\r", message_size, written);
-        ff_fclose(file);
-        return;
-    }
-
-    ff_fclose(file);
-
-    file = ff_fopen(filepath, "r");
-    if (!file) {
-        printf("ERROR: Unable to open file: %s\n\r", filepath);
-        return;
-    }
-
-    size_t read = ff_fread(&buffer, 1, message_size, file);
-    if (read < message_size) {
-        printf("ERROR: Expected to write %zu but written %zu\n\r", message_size, written);
-        ff_fclose(file);
-        return;
-    }
-
-    ff_fclose(file);
-
-    printf("File Message: %s\n\r", buffer);
-}
+#define mainRAM_DISK_NAME "/ram"
+#define mainRAM_DISK_SECTOR_SIZE 512UL
+#define mainRAM_DISK_SECTORS ((100UL * 1024UL) / mainRAM_DISK_SECTOR_SIZE)
+#define mainIO_MANAGER_CACHE_SIZE (mainRAM_DISK_SECTOR_SIZE * 15UL)
 
 void vTaskFATInit(void *pvParameters) {
-    static uint8_t RAMDiskBuff[RAMDISK_SECTOR_SIZE * RAMDISK_SECTORS] = {0};
-    FF_Disk_t *disk = FF_RAMDiskInit(RAMDISK_NAME, RAMDiskBuff, RAMDISK_SECTORS, IOMANAGER_CACHE_SIZE);
+    static uint8_t RAM_disk[mainRAM_DISK_SECTORS * mainRAM_DISK_SECTOR_SIZE];
+    FF_Disk_t *disk = FF_RAMDiskInit(mainRAM_DISK_NAME, RAM_disk, mainRAM_DISK_SECTORS, mainIO_MANAGER_CACHE_SIZE);
+    if (disk == NULL) {
+        printf("ERROR: Unable to create disk\r\n");
+        return;
+    }
     FF_RAMDiskShowPartition(disk);
-    read_write_file();
 }
