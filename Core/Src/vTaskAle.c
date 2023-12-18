@@ -32,8 +32,6 @@ void vTaskAle(void *pvParameters)
 	ff_fwrite(hello, strlen(hello), 1, file_ale);
 	ff_fclose(file_ale);
 
-	pcRAMBuffer = (char *) pvPortMalloc(512);
-
 
 	for(;;)
 	{
