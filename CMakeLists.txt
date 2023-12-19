@@ -1,5 +1,5 @@
 # Set the minimum required version of CMake
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.18)
 
 # Declare the project
 project(OBC
@@ -7,9 +7,24 @@ project(OBC
     DESCRIPTION "On board software for Albasat OBC"
     LANGUAGES C CXX ASM)
 
-# Do not allow in-source build.
+# Do not allow in-source build
 if( ${PROJECT_SOURCE_DIR} STREQUAL ${PROJECT_BINARY_DIR} )
     message( FATAL_ERROR "In-source build is not allowed. Please build in a separate directory, such as ${PROJECT_SOURCE_DIR}/build." )
+endif()
+
+# Find git - this makes available GIT_FOUND and GIT_EXECUTABLE
+find_package(Git)
+
+# Do not allow build without submodules
+if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                    RESULT_VARIABLE GIT_SUBMOD_RESULT)
+    if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+        message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules.")
+    endif()
+else()
+    message(WARNING "Either git not found or this is not a git repository. Cannot check for submodules.")
 endif()
 
 # Set the standard
@@ -40,35 +55,36 @@ add_executable(${PROJECT_NAME}.elf)
 set_target_properties(${PROJECT_NAME}.elf PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
 
 
-add_subdirectory(Drivers/STM32F4xx_HAL_Driver)
-add_subdirectory(Core/Src)
+add_subdirectory(Drivers)
+add_subdirectory(Core)
 
 target_link_libraries(${PROJECT_NAME}.elf
     PRIVATE
         ${PROJECT_NAME}_DRIVERS
-        ${PROJECT_NAME}_CORE
+) 
+target_link_libraries(${PROJECT_NAME}_DRIVERS
+    PRIVATE
+        ${PROJECT_NAME}_CORE_INCLUDE
 )
-
-# Find git
-find_package(Git QUIET)
-
-# Check for submodules
-if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
-    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                    RESULT_VARIABLE GIT_SUBMOD_RESULT)
-    if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-        message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-    endif()
-endif()
 
 # FreeRTOS config
 add_library(freertos_config INTERFACE)
 
-target_include_directories(freertos_config SYSTEM
+#target_include_directories(freertos_config SYSTEM
+#    INTERFACE
+#        Core/Inc
+#        Drivers/STM32F4xx_HAL_Driver/Inc
+#        Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
+#        Drivers/CMSIS/Device/ST/STM32F4xx/Include
+#        Drivers/CMSIS/Device/Include
+#        Drivers/CMSIS/Include
+#)
+
+target_link_libraries(freertos_config
     INTERFACE
-        Core/Inc
-)
+        ${PROJECT_NAME}_DRIVERS_INCLUDE
+        ${PROJECT_NAME}_CORE_INCLUDE
+) 
 
 target_compile_definitions(freertos_config
     INTERFACE
@@ -76,7 +92,7 @@ target_compile_definitions(freertos_config
 )
 
 set(FREERTOS_HEAP "3" CACHE STRING "" FORCE)
-set(FREERTOS_PORT "GCC_POSIX" CACHE STRING "" FORCE)
+set(FREERTOS_PORT "GCC_POSIX" CACHE STRING "")
 if (CMAKE_CROSSCOMPILING)
     set(FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
 endif()
@@ -99,7 +115,15 @@ set(FREERTOS_PLUS_FAT_FETCH_FREERTOS OFF)
 set(FAT_FREERTOS_PATH "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT" CACHE STRING "" FORCE)
 add_subdirectory(${FAT_FREERTOS_PATH})
 
+# We don't use SD card
+set_source_files_properties(${FAT_FREERTOS_PATH}/portable/STM32F4xx/ff_sddisk.c
+    TARGET_DIRECTORY freertos_plus_fat_port
+    PROPERTIES HEADER_FILE_ONLY ON
+)
+
+
 add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE)
 
 # Link libraries
-add_dependencies(${PROJECT_NAME}.elf freertos_kernel freertos_config freertos_plus_fat)
+target_link_libraries(${PROJECT_NAME}.elf PUBLIC freertos_kernel freertos_config freertos_plus_fat)
+

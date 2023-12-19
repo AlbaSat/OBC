@@ -1,6 +1,8 @@
-# This makes available two targets:
-# ${PROJECT_NAME}_DRIVERS_INCLUDE
-# ${PROJECT_NAME}_DRIVERS
+target_include_directories(${PROJECT_NAME}_DRIVERS_INCLUDE
+    INTERFACE
+        Inc
+        Inc/Legacy
+)
 
-add_subdirectory(Inc)
+# ${PROJECT_NAME}_DRIVERS
 add_subdirectory(Src)

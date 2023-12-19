@@ -1,6 +1,5 @@
-# This makes available two targets:
+# This makes available target:
 # ${PROJECT_NAME}_CORE_INCLUDE
-# ${PROJECT_NAME}_CORE
 
 add_subdirectory(Inc)
 add_subdirectory(Src)
