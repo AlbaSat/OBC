@@ -10,7 +10,7 @@ This project is a firmware for STM32F411RE microcontroller. It uses FreeRTOS as 
 ## Building the Project
 
 ### Dependencies
-- CMake 3.11 or higher
+- CMake 3.18 or higher
 - GNU Arm Embedded Toolchain
 - ST-Link utility from [here](https://github.com/stlink-org/stlink).
 
@@ -34,8 +34,8 @@ git clone --recurse-submodules https://github.com/AlbaSat/OBC.git -b stm32
 ### Build
 This project uses CMake as its build system. To build the project, navigate to the project root directory and run the following commands:
 ```shell
-mkdir -p build && cd build
-cmake ..
+mkdir build && cd build
+cmake --toolchain ../cmake/arm-gcc-toolchain.cmake ..
 make
 ```
 This will generate the executable OBC.elf in the build directory.
