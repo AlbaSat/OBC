@@ -25,9 +25,8 @@ jobs:
 
       - name: Configure and Build
         run: |
-          mkdir build
-          cd build
-          cmake ..
+          mkdir build && cd build
+          cmake --toolchain ../cmake/arm-gcc-toolchain.cmake ..
           make
 #          cmake -DCMAKE_TOOLCHAIN_FILE=../toolchain-arm-none-eabi.cmake -DCMAKE_BUILD_TYPE=${{ matrix.cmake_build_type }} ..
 #          cmake --build .
