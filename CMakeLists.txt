@@ -1,131 +1,130 @@
 # Set the minimum required version of CMake
-cmake_minimum_required(VERSION 3.15)
-
-# Set the target system for cross compilation
-set(CMAKE_SYSTEM_NAME Generic)
-
-# Set compilers
-set(CMAKE_C_COMPILER arm-none-eabi-gcc)
-set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
-set(CMAKE_ASM_COMPILER arm-none-eabi-gcc)
-set(CMAKE_AR arm-none-eabi-ar)
-set(CMAKE_OBJCOPY arm-none-eabi-objcopy)
-set(CMAKE_OBJDUMP arm-none-eabi-objdump)
-set(SIZE arm-none-eabi-size)
-set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+cmake_minimum_required(VERSION 3.18)
 
 # Declare the project
-project(OBC C CXX ASM)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_C_STANDARD 17)
+project(OBC
+    VERSION 0.1
+    DESCRIPTION "On board software for Albasat OBC"
+    LANGUAGES C CXX ASM)
 
-# Include FetchContent
-include(FetchContent)
+# Do not allow in-source build
+if( ${PROJECT_SOURCE_DIR} STREQUAL ${PROJECT_BINARY_DIR} )
+    message( FATAL_ERROR "In-source build is not allowed. Please build in a separate directory, such as ${PROJECT_SOURCE_DIR}/build." )
+endif()
 
-# Define sources and linker script
-#file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/*.*")
-set(SOURCES
-        # Core/Startup
-        Core/Startup/startup_stm32f411retx.s
+# Find git - this makes available GIT_FOUND and GIT_EXECUTABLE
+find_package(Git)
 
-        # Core/Src/
-        Core/Src/freertos.c
-        Core/Src/main.c
-        Core/Src/stm32f4xx_hal_msp.c
-        Core/Src/stm32f4xx_it.c
-        Core/Src/syscalls.c
-        Core/Src/sysmem.c
-        Core/Src/system_stm32f4xx.c
-        Core/Src/vTask1.c
-        Core/Src/task_gianluca.c
+# Do not allow build without submodules
+if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                    RESULT_VARIABLE GIT_SUBMOD_RESULT)
+    if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+        message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules.")
+    endif()
+else()
+    message(WARNING "Either git not found or this is not a git repository. Cannot check for submodules.")
+endif()
 
-        # Drivers/STM32F4xx_HAL_Driver/Src/
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c
-        Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
+# Set the standard
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "The C++ standard to use")
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_C_STANDARD 17 CACHE STRING "The C standard to use")
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
 
+# Set common flags
+set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs -specs=nosys.specs")
+set(CMAKE_C_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections ${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections ${CMAKE_CXX_FLAGS}")
+set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} ${CMAKE_ASM_FLAGS}")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_compile_options(-g -ggdb)
 
-)
-
+# Set linker
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F411RETX_FLASH.ld)
 
 # Add link options
 add_link_options(-Wl,-gc-sections,--print-memory-usage,-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map)
 add_link_options(-T ${LINKER_SCRIPT})
 
-# Include directories
-include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc
-        Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
-        Drivers/CMSIS/Device/ST/STM32F4xx/Include
-        Drivers/CMSIS/Include
+# Create executable and add link script to sources
+add_executable(${PROJECT_NAME}.elf)
+#target_sources(${PROJECT_NAME}.elf ${LINKER_SCRIPT})
+set_target_properties(${PROJECT_NAME}.elf PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
+
+
+add_subdirectory(Drivers)
+add_subdirectory(Core)
+
+target_link_libraries(${PROJECT_NAME}.elf
+    PRIVATE
+        ${PROJECT_NAME}_DRIVERS
+) 
+target_link_libraries(${PROJECT_NAME}_DRIVERS
+    PRIVATE
+        ${PROJECT_NAME}_CORE_INCLUDE
 )
 
-# Set common flags
-#set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs -specs=nosys.specs")
-set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -specs=nano.specs -specs=nosys.specs")
-set(CMAKE_C_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections -DTASK_PRIORITY=0 ${CMAKE_C_FLAGS}")
-set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -Wall -fdata-sections -ffunction-sections -DTASK_PRIORITY=0 ${CMAKE_CXX_FLAGS}")
-set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} ${CMAKE_ASM_FLAGS}")
-add_compile_options(-g -ggdb)
-
-# Fetch FreeRTOS
-FetchContent_Declare(freertos_kernel
-        GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel.git
-        GIT_TAG V10.6.2 #Note: Best practice to use specific git-hash or tagged version
-)
-
-## FreeRTOS config
+# FreeRTOS config
 add_library(freertos_config INTERFACE)
 
-target_include_directories(freertos_config SYSTEM
-        INTERFACE
-        Core/Inc
-)
+#target_include_directories(freertos_config SYSTEM
+#    INTERFACE
+#        Core/Inc
+#        Drivers/STM32F4xx_HAL_Driver/Inc
+#        Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
+#        Drivers/CMSIS/Device/ST/STM32F4xx/Include
+#        Drivers/CMSIS/Device/Include
+#        Drivers/CMSIS/Include
+#)
+
+target_link_libraries(freertos_config
+    INTERFACE
+        ${PROJECT_NAME}_DRIVERS_INCLUDE
+        ${PROJECT_NAME}_CORE_INCLUDE
+) 
 
 target_compile_definitions(freertos_config
-        INTERFACE
+    INTERFACE
         projCOVERAGE_TEST=0
 )
 
 set(FREERTOS_HEAP "3" CACHE STRING "" FORCE)
-set(FREERTOS_PORT "GCC_ARM_CM3" CACHE STRING "" FORCE) # GCC_ARM_CM3 for QEMU build, GCC_ARM_CM4F for STM32F4
+set(FREERTOS_PORT "GCC_POSIX" CACHE STRING "")
+if (CMAKE_CROSSCOMPILING)
+    set(FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
+endif()
 
 target_compile_definitions(freertos_config INTERFACE ${definitions})
 target_compile_options(freertos_config INTERFACE ${options})
-FetchContent_MakeAvailable(freertos_kernel)
 
-# Fetch FreeRTOS+FAT
-FetchContent_Declare(freertos_plus_fat
-        GIT_REPOSITORY https://github.com/FreeRTOS/Lab-Project-FreeRTOS-FAT.git
-        GIT_TAG 25129e5221ae6ebf9d88e11f78d33c68edb254fb #Note: Best practice to use specific git-hash or tagged version
-        GIT_SUBMODULES "" # Don't grab any submodules since not latest
-)
+set(FREERTOS_PATH "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/FreeRTOS-Kernel" CACHE STRING "" FORCE)
+add_subdirectory(${FREERTOS_PATH})
 
-set(FREERTOS_PLUS_FAT_DEV_SUPPORT OFF CACHE BOOL "" FORCE)
 # Select the native compile PORT
 set(FREERTOS_PLUS_FAT_PORT POSIX CACHE STRING "")
 # Select the cross-compile PORT
 if (CMAKE_CROSSCOMPILING)
     # Eg. Zynq 2019_3 version of port
-    set(FREERTOS_PLUS_FAT_PORT STM32F4xx CACHE STRING "")
+    set(FREERTOS_PLUS_FAT_PORT STM32F4XX CACHE STRING "" FORCE)
 endif ()
+set(FREERTOS_PLUS_FAT_FETCH_FREERTOS OFF)
 
-FetchContent_MakeAvailable(freertos_plus_fat)
+set(FAT_FREERTOS_PATH "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT" CACHE STRING "" FORCE)
+add_subdirectory(${FAT_FREERTOS_PATH})
 
-# Define target
-add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
+# We don't use SD card
+set_source_files_properties(${FAT_FREERTOS_PATH}/portable/STM32F4xx/ff_sddisk.c
+    TARGET_DIRECTORY freertos_plus_fat_port
+    PROPERTIES HEADER_FILE_ONLY ON
+)
+
+
 add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE)
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME}.elf freertos_kernel freertos_config freertos_plus_fat)
+target_link_libraries(${PROJECT_NAME}.elf PUBLIC freertos_kernel freertos_config freertos_plus_fat)
+
