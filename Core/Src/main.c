@@ -8,7 +8,6 @@
   *
   * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
-  *
   * This software is licensed under terms that can be found in the LICENSE file
   * in the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
@@ -123,8 +122,6 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
 
-  //xTaskCreate(vTask1, "Task 1", 256, NULL, 1, NULL);
-  //xTaskCreate(vTask2, "Task 2", 256, NULL, 1, NULL);
   xTaskCreate(vTaskFATInit, "Task FAT Init", 256, NULL, 1, NULL);
   vTaskStartScheduler();
 
