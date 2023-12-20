@@ -14,7 +14,3 @@ target_sources(${PROJECT_NAME}.elf
         ${SOURCES}
 )
 
-target_link_libraries(${PROJECT_NAME}.elf
-    PUBLIC
-        ${PROJECT_NAME}_CORE_INCLUDE
-)
