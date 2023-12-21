@@ -15,6 +15,13 @@ endif()
 # Find git - this makes available GIT_FOUND and GIT_EXECUTABLE
 find_package(Git)
 
+# set Threads, needed to fix "could not find threads" error https://github.com/alicevision/geogram/issues/2#issuecomment-536835320
+set(CMAKE_THREAD_LIBS_INIT "-lpthread")
+set(CMAKE_HAVE_THREADS_LIBRARY 1)
+set(CMAKE_USE_WIN32_THREADS_INIT 0)
+set(CMAKE_USE_PTHREADS_INIT 1)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+
 # Do not allow build without submodules
 if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
     execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
