@@ -17,6 +17,7 @@
 #define ffconfigFREE(ptr)       vPortFree(ptr)
 #define	ffconfigMAX_PARTITIONS  1
 #define ffconfigMIN_CLUSTERS_FAT16  64
+#define ffconfigDEBUG 1
 
 
 
