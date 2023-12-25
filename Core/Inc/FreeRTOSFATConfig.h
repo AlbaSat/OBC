@@ -18,7 +18,7 @@
 #define	ffconfigMAX_PARTITIONS  1
 #define ffconfigMIN_CLUSTERS_FAT16  64
 #define ffconfigDEBUG 1
-
+#define ffconfigHAS_CWD 1
 
 
 

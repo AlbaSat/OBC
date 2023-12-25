@@ -123,7 +123,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
 
-  xTaskCreate(vTaskAle, "Task 1", 256, NULL, 1, NULL);
+  xTaskCreate(vTaskAle, "Task 1", 256, NULL, 0, NULL);
   //xTaskCreate(vTask2, "Task 2", 256, NULL, 1, NULL);
   vTaskStartScheduler();
 

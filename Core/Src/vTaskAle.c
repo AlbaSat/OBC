@@ -8,6 +8,7 @@
 #include "task1_ale.h"
 #include "main.h"
 #include "ff_ramdisk.h"
+#include "ff_stdio.h"
 
 void vTaskAle(void *pvParameters)
 {
@@ -17,20 +18,37 @@ void vTaskAle(void *pvParameters)
 	disk_ale = FF_RAMDiskInit(RAMDISK_NAME,//
 			buffer_ale, RAMDISK_SECTOR_COUNT,//
 			IOMAN_CACHE_SIZE);
-	//TODO: disk gets created and partitioned correctly, but not formatted and consequently
-	//not mounted correctly; following code does not work.
 
-	//Create directory inside RAM disk
+	//Mount newly created disk
+	FF_Error_t mounting_error;
+	mounting_error = FF_Mount(disk_ale, 0);
+	FF_GetErrMessage(mounting_error);
+
+	//Create mock directory
 	int dir_ok = 0;
-	dir_ok = ff_mkdir("/ram");
+	//Do not call the folder "subfolder", that keyword crashes
+	dir_ok = ff_mkdir("/ram/hello");
+
+	int change_ok = 0;
+	if(ff_finddir("/ram/hello") == 0){
+		printf("Could not find the newly created folder");
+	}
+	else{
+		change_ok = ff_chdir("/ram/hello");
+	}
 
 	//Create mock file
-	FF_FILE * file_ale = ff_fopen("/ram/dir_ale/text_ale.txt", "w");
+	int my_file = 0;
+	my_file = ff_fopen("prova.txt", "a");	//TODO: now this crashes into a semaphore wait forever
 
-	//Write on it
-	char * hello = "Hello, World!";
-	ff_fwrite(hello, strlen(hello), 1, file_ale);
-	ff_fclose(file_ale);
+	size_t written_items = 0;
+	char * hello;
+	if(my_file != NULL){
+		//Write on it
+		hello = "Hello, World!";
+		written_items = ff_fwrite(hello, sizeof(char), strlen(hello) / sizeof(char), my_file);
+	}
+	ff_fclose(my_file);
 
 
 	for(;;)
@@ -38,22 +56,18 @@ void vTaskAle(void *pvParameters)
 		//printf("Task1\n\r");
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
+
+		char* read_buffer[50];
+		my_file = ff_fopen("prova.txt", "r");
+		written_items = ff_fread(read_buffer, sizeof(char),//
+				strlen(hello) / sizeof(char), my_file);
+
+		printf(read_buffer);
+
+		ff_fclose(my_file);
+
 		vTaskDelay(1000);
 
-		//Read already created file
-		file_ale = ff_fopen("/ram/dir_ale/text_ale.txt", "r");
-		//Destination buffer
-		char readen_buffer[100];
-
-		ff_fread(readen_buffer, sizeof(readen_buffer), 13, file_ale);
-		//Null termination
-		readen_buffer[sizeof(readen_buffer)- 1] = '\0';
-
-		//Close file
-		ff_fclose(file_ale);
-
-		//Print over serial port
-		printf(readen_buffer);
 	}
 
 }
