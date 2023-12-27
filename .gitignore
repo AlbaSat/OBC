@@ -1,9 +1,4 @@
 Debug
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/
 OBC Debug.launch
-.idea
-build/
-cmake-build-debug
-.vscode
-compile_commands.json
-.cache
+tags
