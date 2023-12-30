@@ -17,6 +17,7 @@
 #define ffconfigMALLOC(size)    pvPortMalloc(size)
 #define ffconfigFREE(ptr)       vPortFree(ptr)
 #define	ffconfigMAX_PARTITIONS  1
-#define ffconfigMIN_CLUSTERS_FAT16  64
+#define ffconfigMIN_CLUSTERS_FAT16  50
+#define ffconfigOPTIMISE_UNALIGNED_ACCESS 1
 
 #endif /* INC_FREERTOSFATCONFIG_H_ */
