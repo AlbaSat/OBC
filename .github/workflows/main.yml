@@ -38,7 +38,7 @@ jobs:
       uses: philippdiethelm/action-build-stm32cubeide@v9.1
       with:
         project-path: '.'
-        project-target: 'all'
+        project-target: 'Debug'
 
     - name: Upload Published Artifact
       uses: actions/upload-artifact@v3
