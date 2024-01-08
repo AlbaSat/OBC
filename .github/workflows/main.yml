@@ -33,7 +33,11 @@ jobs:
 
     - name: Fix git safe.directory in container
       run: mkdir -p /home/runner/work/_temp/_github_home && printf "[safe]\n\tdirectory = /github/workspace" > /home/runner/work/_temp/_github_home/.gitconfig
-
+    
+    - name: Git Submodule Update
+      run: |
+        git pull --recurse-submodules
+    
     - name: Build the project
       uses: philippdiethelm/action-build-stm32cubeide@v9.1
       with:
