@@ -46,8 +46,8 @@ jobs:
     - name: Build STM32CubeIde project
       uses: xanderhendriks/action-build-stm32cubeide@v10.0
       with:
-        project-path: '${{ github.workspace }}'
-        project-target: '${{ github.workspace }}/Debug'
+        project-path: '.'
+        project-target: './Debug'
       
     - name: Upload Published Artifact
       uses: actions/upload-artifact@v3
