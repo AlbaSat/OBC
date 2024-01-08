@@ -1,0 +1,49 @@
+name: Build
+
+# To run locally use:
+# act
+
+on:
+  push:
+  pull_request:
+    branches: [ "stm32" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Generate Short SHA name
+      shell: bash
+      id: generate-shortsha
+      run: |
+        echo "SHORT_SHA=`echo ${{ github.sha }} | cut -c 1-8`" >> "$GITHUB_ENV"
+        echo "REF_NAME=`echo ${{ github.ref_name }} | sed 's/\//-/g'`" >> "$GITHUB_ENV"
+
+    - name: Generate artifact name
+      shell: bash
+      id: generate-name
+      run: |
+        echo "Short SHA is: ${{ env.SHORT_SHA }}"
+        echo "REF_NAME is: '${{ env.REF_NAME }}'"
+        echo "artifact=demo_project.${{ env.REF_NAME }}.${{ env.SHORT_SHA }}" >> "$GITHUB_ENV"
+
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Fix git safe.directory in container
+      run: mkdir -p /home/runner/work/_temp/_github_home && printf "[safe]\n\tdirectory = /github/workspace" > /home/runner/work/_temp/_github_home/.gitconfig
+
+    - name: Build the project
+      uses: philippdiethelm/action-build-stm32cubeide@v9.1
+      with:
+        project-path: '.'
+        project-target: 'all'
+
+    - name: Upload Published Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.artifact }}
+        path: |
+          ${{ github.workspace }}/Debug/OBC.elf
+          ${{ github.workspace }}/Debug/OBC.list
