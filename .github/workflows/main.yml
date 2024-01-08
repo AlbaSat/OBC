@@ -41,7 +41,7 @@ jobs:
     - name: Build the project
       uses: philippdiethelm/action-build-stm32cubeide@v9.1
       with:
-        project-path: './'
+        project-path: './OBC/Debug'
         project-target: 'all'
 
     - name: Upload Published Artifact
