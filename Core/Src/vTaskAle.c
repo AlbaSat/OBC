@@ -26,45 +26,42 @@ void vTaskAle(void *pvParameters)
 
 	//Create mock directory
 	int dir_ok = 0;
-	//Do not call the folder "subfolder", that keyword crashes
-	dir_ok = ff_mkdir("/ram/hello");
+	dir_ok = ff_mkdir("/ram/firstSub");
 
+	//Change dir
 	int change_ok = 0;
-	if(ff_finddir("/ram/hello") == 0){
-		printf("Could not find the newly created folder");
-	}
-	else{
-		change_ok = ff_chdir("/ram/hello");
-	}
+	change_ok = ff_chdir("/ram/firstSub");
 
 	//Create mock file
 	int my_file = 0;
-	my_file = ff_fopen("prova.txt", "a");	//TODO: now this crashes into a semaphore wait forever
+	my_file = ff_fopen("./a.txt", "a+");
 
 	size_t written_items = 0;
 	char * hello;
 	if(my_file != NULL){
 		//Write on it
-		hello = "Hello, World!";
+		hello = "Hello, World!\n\r";
 		written_items = ff_fwrite(hello, sizeof(char), strlen(hello) / sizeof(char), my_file);
+		//Close before re accessing it in the loop
+		int close_ok = 0;
+		close_ok = ff_fclose(my_file);
 	}
-	ff_fclose(my_file);
 
 
 	for(;;)
 	{
-		//printf("Task1\n\r");
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
 
-		char* read_buffer[50];
-		my_file = ff_fopen("prova.txt", "r");
+		char* read_buffer = pvPortMalloc(50);
+		my_file = ff_fopen("./a.txt", "r");
 		written_items = ff_fread(read_buffer, sizeof(char),//
 				strlen(hello) / sizeof(char), my_file);
 
-		printf(read_buffer);
+		FF_PRINTF(read_buffer);
 
 		ff_fclose(my_file);
+
+		vPortFree(read_buffer);
 
 		vTaskDelay(1000);
 
