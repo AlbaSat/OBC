@@ -50,23 +50,23 @@
 									<listOptionValue builtIn="false" value="STM32F411xE"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths.288798848" name="Include paths (-I)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="../Core/Inc"/>
-									<listOptionValue builtIn="false" value="../Drivers/STM32F4xx_HAL_Driver/Inc"/>
-									<listOptionValue builtIn="false" value="../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
-									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
-									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
-									<listOptionValue builtIn="false" value="../Middlewares/Third_Party/FreeRTOS/Source/include"/>
-									<listOptionValue builtIn="false" value="../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS"/>
-									<listOptionValue builtIn="false" value="../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F"/>
-									<listOptionValue builtIn="false" value="C:\Users\Alessandro\STM32CubeIDE\workspace_1.13.2\OBC\Middlewares\Third_Party\FreeRTOS-Kernel\include"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Alessandro\STM32CubeIDE\workspace_1.13.2\OBC\Middlewares\Third_Party\FreeRTOS-Kernel\portable&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Alessandro\STM32CubeIDE\workspace_1.13.2\OBC\Middlewares\Third_Party\Lab-Project-FreeRTOS-FAT\include&quot;"/>
-									<listOptionValue builtIn="false" value="C:\Users\Alessandro\STM32CubeIDE\workspace_1.13.2\OBC\Middlewares\Third_Party\FreeRTOS-Kernel\portable\GCC\ARM_CM4F"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Alessandro\STM32CubeIDE\workspace_1.13.2\OBC\Middlewares\Third_Party\Lab-Project-FreeRTOS-FAT\portable\STM32F4xx&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Alessandro\STM32CubeIDE\workspace_1.13.2\OBC\Middlewares\Third_Party\Lab-Project-FreeRTOS-FAT\portable\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Alessandro\STM32CubeIDE\workspace_1.13.2\OBC\Middlewares\Third_Party\FreeRTOS-Kernel\portable\MemMang&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Alessandro\STM32CubeIDE\workspace_1.13.2\OBC\Middlewares\Third_Party\FreeRTOS-Kernel&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\Users\Alessandro\STM32CubeIDE\workspace_1.13.2\OBC\Middlewares\Third_Party\Lab-Project-FreeRTOS-FAT&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Core/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Drivers/STM32F4xx_HAL_Driver/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT/portable/STM32F4xx}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Middlewares/Third_Party/FreeRTOS-Kernel/portable/GCC/ARM_CM4F}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Middlewares/Third_Party/FreeRTOS-Kernel/portable}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Middlewares/Third_Party/FreeRTOS-Kernel/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Middlewares/Third_Party/FreeRTOS-Kernel/portable/MemMang}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT/portable/common}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Middlewares/Third_Party/FreeRTOS-Kernel}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Middlewares/Third_Party/FreeRTOS/Source/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Drivers/CMSIS/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Drivers/CMSIS/Device/ST/STM32F4xx/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/OBC/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy}&quot;"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.337438915" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>
@@ -94,9 +94,6 @@
 					</folderInfo>
 					<fileInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1367515244.1476112634" name="stm32f4xx_ll_sdmmc.h" rcbsApplicability="disable" resourcePath="Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT/portable/STM32F4xx/stm32f4xx_ll_sdmmc.h" toolsToInvoke=""/>
 					<fileInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1367515244.417525499" name="stm32f4xx_hal_sd.h" rcbsApplicability="disable" resourcePath="Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT/portable/STM32F4xx/stm32f4xx_hal_sd.h" toolsToInvoke=""/>
-					<fileInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1367515244.70055873" name="heap_3.c" rcbsApplicability="disable" resourcePath="Middlewares/Third_Party/FreeRTOS-Kernel/portable/MemMang/heap_3.c" toolsToInvoke="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1079112867.1781711481">
-						<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1079112867.1781711481" name="MCU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1079112867"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>

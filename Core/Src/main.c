@@ -17,10 +17,7 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include "task1_ale.h"
 #include "main.h"
-#include "stdlib.h"
-#include <stdio.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -60,10 +57,6 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-void vTask1(void *pvParameters);
-void vTask2(void *pvParameters);
-
 
 
 
@@ -124,7 +117,8 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
 
-  xTaskCreate(vTaskAle, "Task 1", 1024, NULL, 2, NULL);
+  xTaskCreate(vTaskAle, "Task RAM", 1024, NULL, 2, NULL);
+  xTaskCreate(vTask2Ale, "Task ECHO", 256, NULL, 3, NULL);
 
   /* USER CODE END RTOS_THREADS */
 
@@ -233,10 +227,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5|GPIO_PIN_12, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PA5 */
-  GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_12;
+  /*Configure GPIO pin : PA0 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -254,25 +248,6 @@ int _write(int fd, char * ptr, int len)
 	return len;
 }
 
-void vTask1(void *pvParameters)
-{
-	for(;;)
-	{
-		printf("Task1\n\r");
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		vTaskDelay(1000);
-	}
-}
-
-void vTask2(void *pvParameters)
-{
-	for(;;)
-	{
-		printf("Task2\n\r");
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		vTaskDelay(300);
-	}
-}
 
 /* USER CODE END 4 */
 

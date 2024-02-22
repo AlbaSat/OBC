@@ -7,8 +7,6 @@
 
 #include "task1_ale.h"
 #include "main.h"
-#include "ff_ramdisk.h"
-#include "ff_stdio.h"
 
 void vTaskAle(void *pvParameters)
 {
@@ -50,7 +48,7 @@ void vTaskAle(void *pvParameters)
 
 	for(;;)
 	{
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
+		//HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
 
 		char* read_buffer = pvPortMalloc(50);
 		my_file = ff_fopen("./a.txt", "r");
@@ -63,8 +61,8 @@ void vTaskAle(void *pvParameters)
 
 		vPortFree(read_buffer);
 
-		vTaskDelay(1000);
+		vTaskDelay(pdMS_TO_TICKS(100));
 
 	}
-
+	vTaskDelete(NULL);
 }
