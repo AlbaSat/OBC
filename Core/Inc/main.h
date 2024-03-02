@@ -27,18 +27,22 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
-#include "task2_ale.h"
-#include "task1_ale.h"
-#include "FreeRTOSConfig.h"
-#include "FreeRTOSFATConfig.h"
-#include "projdefs.h"
-#include "portmacro.h"
-#include "ff_ramdisk.h"
-#include "ff_stdio.h"
-
 #include <stdlib.h>
 #include <stdio.h>
+
+#include "stm32f4xx_hal.h"
+#include "FreeRTOS.h"
+#include "FreeRTOSConfig.h"
+#include "FreeRTOSFATConfig.h"
+#include "task.h"
+#include "projdefs.h"
+#include "portmacro.h"
+#include "timers.h"
+#include "ff_ramdisk.h"
+#include "ff_stdio.h"
+#include "task2_ale.h"
+#include "task1_ale.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

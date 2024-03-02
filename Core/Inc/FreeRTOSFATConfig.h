@@ -19,12 +19,10 @@
 #define ffconfigMIN_CLUSTERS_FAT16  64
 #define ffconfigDEBUG 1
 #define ffconfigHAS_CWD 1
-#define ffconfigPROTECT_FF_FOPEN_WITH_SEMAPHORE 0
+
 
 #define configHEAP_CLEAR_MEMORY_ON_FREE 1
 #define configAPPLICATION_ALLOCATED_HEAP 1
-
-#define configUSE_NEWLIB_REENTRANT 1
 
 
 
