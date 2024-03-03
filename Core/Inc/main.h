@@ -42,6 +42,8 @@ extern "C" {
 #include "ff_stdio.h"
 #include "task2_ale.h"
 #include "task1_ale.h"
+#include "timer_utils.h"
+#include "stm32f4xx.h"
 
 
 /* Private includes ----------------------------------------------------------*/
