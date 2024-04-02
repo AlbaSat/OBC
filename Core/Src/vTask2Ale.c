@@ -14,15 +14,15 @@ void vTask2Ale(void *pvParameters){
     //xTimerStart(my_handle, 0);
 
     for(;;) {
-    	  Trig_low; 														//turn off trig
-    	  delayuS(10); 													//wait 4uS
-    	  Trig_high;  													//turn on trig
+    	  Trig_low; 											//turn off trig
+    	  delayuS(10); 											//wait 4uS
+    	  Trig_high;  											//turn on trig
     	  delayuS(10);
     	  Trig_low;
-    	  duration=read_echo(400000); 								    //measure the time of echo pin
-    	  distance=duration/58;											//distance=duration/2*SOUND_SPEED in cm
+    	  duration=read_echo(400000); 							//measure the time of echo pin
+    	  distance=duration/58;									//distance=duration/2*SOUND_SPEED in cm
     	  printf("distance %f\r\n", distance);
-    	  delaymS(100);													//delay for .1 second between each read
+    	  delaymS(100);											//delay for .1 second between each read
     }
     vTaskDelete(NULL);
 }
