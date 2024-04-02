@@ -1,8 +1,11 @@
 #include "main.h"
+#include <stdbool.h>
 
 //macros for trigger pin
 #define Trig_high		GPIOA->BSRR = GPIO_BSRR_BS_0 			// turn on 	PA0 (trig pin)
 #define Trig_low		GPIOA->BSRR = GPIO_BSRR_BR_0 			// turn off PA0 (trig pin)
+
+volatile bool my_trig = false;
 
 void TIMER_setup(void){
 	//Configure Timer to generate microseconds delay
@@ -40,7 +43,6 @@ void delayuS(uint32_t us){
 	}
 }
 
-volatile bool my_trig = false;
 
 void TIM2_IRQHandler(void)
 {
