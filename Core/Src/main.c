@@ -59,11 +59,8 @@ static void MX_USART2_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-//prototypes of the used function
-void delaymS(uint32_t ms);
-void delayuS(uint32_t us);
-uint32_t read_echo(uint32_t timeout);
-
+//MUTEX for the FF_PRINTF of the 2 tasks
+SemaphoreHandle_t printMutex;
 
 /* USER CODE END 0 */
 
@@ -112,6 +109,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
+  printMutex = xSemaphoreCreateMutex();
   /* USER CODE END RTOS_MUTEX */
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
@@ -131,8 +129,8 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
 
-  //xTaskCreate(vTaskAle, "Task RAM", 1024, NULL, 3, NULL);
-  xTaskCreate(vTask2Ale, "Task ECHO", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES-1, NULL);
+  xTaskCreate(vTaskAle, "Task RAM", 1024, NULL, 3, NULL);
+  xTaskCreate(vTask2Ale, "Task ECHO", 1024, NULL, 3, NULL);
 
   /* USER CODE END RTOS_THREADS */
 

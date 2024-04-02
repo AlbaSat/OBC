@@ -8,6 +8,8 @@
 #include "task1_ale.h"
 #include "main.h"
 
+extern SemaphoreHandle_t printMutex;
+
 void vTaskAle(void *pvParameters)
 {
 	//Create RAM disk
@@ -55,7 +57,10 @@ void vTaskAle(void *pvParameters)
 		written_items = ff_fread(read_buffer, sizeof(char),//
 				strlen(hello) / sizeof(char), my_file);
 
-		FF_PRINTF(read_buffer);
+		if(xSemaphoreTake(printMutex, (TickType_t)10) == pdTRUE) {
+			FF_PRINTF(read_buffer);
+		    xSemaphoreGive(printMutex);
+		}
 
 		ff_fclose(my_file);
 

@@ -28,15 +28,24 @@ void delayuS(uint32_t us) //delay for certain amount in microseconds
 uint32_t read_echo(uint32_t timeout)
 	{
 	uint32_t duration;
-
-	while(!((GPIOA->IDR)&GPIO_IDR_ID1)){duration++;delayuS(1);
-
-	if(duration>timeout){return 0;}
-
+	while(!((GPIOA->IDR)&GPIO_IDR_ID1)){
+		duration++;
+		delayuS(1);
+		if(duration>timeout){
+			return 0;
+		}
 	}
 
 	duration=0;
 
-	while((GPIOA->IDR&GPIO_IDR_ID1)){duration++;delayuS(1);if(duration>timeout){return 0;} }
-		return duration;
+	while((GPIOA->IDR&GPIO_IDR_ID1)){
+		duration++;
+		delayuS(1);
+		if(duration>timeout){
+			return 0;
+		}
+	}
+
+	return duration;
+
 	}
