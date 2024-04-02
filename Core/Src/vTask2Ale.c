@@ -17,14 +17,14 @@ void vTask2Ale(void *pvParameters){
 
     for(;;) {
 		Trig_low; 											//turn off trig
-		delayuS(10); 										//wait 4uS
+		delayuS(10); 										//wait 10uS
 		Trig_high;  										//turn on trig
 		delayuS(10);
 		Trig_low;
-		duration=read_echo(400000); 						//measure the time of echo pin
-		distance=duration/58;								//distance=duration/2*SOUND_SPEED in cm
+		duration=read_echo(400000); 						//measure the time of echo pin in us
+		distance=duration*0.1715*0.5;						//distance=duration/2*SOUND_SPEED in cm
 		if(xSemaphoreTake(printMutex, (TickType_t)10) == pdTRUE) {
-		    FF_PRINTF("distance %f\r\n", distance);
+		    FF_PRINTF("distance %f cm\r\n", distance);
 		    xSemaphoreGive(printMutex);
 		}
 		vTaskDelay(pdMS_TO_TICKS(100));

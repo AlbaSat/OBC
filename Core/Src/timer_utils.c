@@ -18,10 +18,11 @@ void delaymS(uint32_t ms) //delay for certain amount in milliseconds
 void delayuS(uint32_t us) //delay for certain amount in microseconds
 	{
 	for(int i =0;i<us;i++){
+		while(!(TIM1->SR & 1)){
 
-			 while(!(TIM1->SR & 1)){}   /*wait for UIF set*/
-				 TIM1->SR &= ~1;
+		}   /*wait for UIF set*/
 
+		TIM1->SR &= ~1;
 	}
 }
 
