@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include <math.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -58,6 +59,11 @@ static void MX_USART2_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+//prototypes of the used function
+void delaymS(uint32_t ms);
+void delayuS(uint32_t us);
+uint32_t read_echo(uint32_t timeout);
+
 
 /* USER CODE END 0 */
 
@@ -78,8 +84,6 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 
-  TIMER_setup();
-
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -93,6 +97,16 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+
+  RCC->AHB1ENR	|=	RCC_AHB1ENR_GPIOAEN; 						//enable GPIOA Clock
+  GPIOA->MODER	|=	(1<<0);   									//set PA0 to Output
+
+  //configure Timer1 to generate microseconds delay
+  RCC->APB2ENR |= RCC_APB2ENR_TIM1EN;  /*Enable TIM1 clock*/
+  TIM1->PSC = 16 -1;  /* 16 000 000 /16 = 1000 000*/
+  TIM1->ARR = 1;  /* 1000 000 /1 = 1000000*/
+  TIM1->CNT =0;
+  TIM1->CR1 =1;
 
   /* USER CODE END 2 */
 
@@ -118,7 +132,7 @@ int main(void)
   /* USER CODE BEGIN RTOS_THREADS */
 
   //xTaskCreate(vTaskAle, "Task RAM", 1024, NULL, 3, NULL);
-  //xTaskCreate(vTask2Ale, "Task ECHO", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES-1, NULL);
+  xTaskCreate(vTask2Ale, "Task ECHO", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES-1, NULL);
 
   /* USER CODE END RTOS_THREADS */
 
@@ -127,15 +141,10 @@ int main(void)
 
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-
-  while (1)
+  while(1)
   {
-	/* USER CODE END WHILE */
-
-	/* USER CODE BEGIN 3 */
   }
-  /* USER CODE END 3 */
+
 }
 
 /**

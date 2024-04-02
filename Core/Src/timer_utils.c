@@ -1,61 +1,35 @@
 #include "main.h"
-#include <stdbool.h>
 
-//macros for trigger pin
-#define Trig_high		GPIOA->BSRR = GPIO_BSRR_BS_0 			// turn on 	PA0 (trig pin)
-#define Trig_low		GPIOA->BSRR = GPIO_BSRR_BR_0 			// turn off PA0 (trig pin)
-
-volatile bool my_trig = false;
-
-void TIMER_setup(void){
-	//Configure Timer to generate microseconds delay
-	//The default freeRTOS xTimerCreate is too slow and memory hungry;
-	//use one of many dedicated timers
-
-	//Update frequency: freqclk /(Prescaler-1)
-
-	//Atm there is no HAL for the timers ¯\_(ツ)_/¯
-
-	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;	/* Enable TIM3 connection with clock through APB1*/
-
-	TIM2->PSC = 1 - 1;  				/* 16MHz / 1 = 16 MHz*/
-	TIM2->ARR = 160 - 1;  				/* 160 ticks at 62.5ns are 10us*/
-	TIM2->CNT = 0;						/* Initial counter value to zero*/
-	TIM2->DIER |= TIM_DIER_UIE;			/* Enable timer interrupts*/
-
-	NVIC_EnableIRQ(TIM2_IRQn);
-	NVIC_SetPriority(TIM2_IRQn, configMAX_PRIORITIES-1);
-
-	TIM2->CR1 = TIM_CR1_CEN;			/* Enable TIM2 counting*/
-
-	return;
-}
-
-//Delay for certain amount in microseconds
-void delayuS(uint32_t us){
-	for(int i=0; i<us; i++){
-		//Wait for UIF set
-		while(!(TIM2->SR & TIM_SR_UIF)){
-
+void delaymS(uint32_t ms) //delay for certain amount in milliseconds
+	{
+	SysTick->LOAD=16000-1;
+	SysTick->VAL=0;
+	SysTick->CTRL=0x5;
+		for (int i=0;i<ms;i++)
+		{
+			while(!(SysTick->CTRL &0x10000)){}
 		}
-		//Clear the flag
-		TIM2->SR &= ~TIM_SR_UIF;
-	}
-}
+	SysTick->CTRL=0;
 
-
-void TIM2_IRQHandler(void)
-{
-	if(TIM2->SR & TIM_SR_UIF){
-		if(my_trig){
-			Trig_low;
-		}
-		else{
-			Trig_high;
-		}
-		my_trig = !my_trig;
 	}
 
-	/* Clear the Interrupt Status */
-	TIM2->SR &= ~TIM_SR_UIF;
-}
+void delayuS(uint32_t us) //delay for certain amount in microseconds
+	{
+for(int i =0;i<us;i++){
+
+		 while(!(TIM1->SR & 1)){}   /*wait for UIF set*/
+			 TIM1->SR &= ~1;
+
+	}
+	}
+
+uint32_t read_echo(uint32_t timeout)
+	{
+		uint32_t duration;
+	while(!((GPIOA->IDR)&GPIO_IDR_ID1)){duration++;delayuS(1);
+	if(duration>timeout){return 0;}
+	}
+	duration=0;
+while((GPIOA->IDR&GPIO_IDR_ID1)){duration++;delayuS(1);if(duration>timeout){return 0;} }
+	return duration;
+	}
