@@ -8,6 +8,7 @@
 #ifndef INC_TIMER_UTILS_H_
 #define INC_TIMER_UTILS_H_
 
+void setup_Timer1();
 void delaymS(uint32_t ms);
 void delayuS(uint32_t us);
 uint32_t read_echo(uint32_t timeout);
