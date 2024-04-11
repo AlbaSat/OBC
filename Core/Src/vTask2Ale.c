@@ -13,24 +13,21 @@ extern SemaphoreHandle_t printMutex;
 volatile void vTask2Ale(void *pvParameters){
     //TimerHandle_t my_handle = xTimerCreate("MyTimer", pdMS_TO_TICKS(1000), pdTRUE, 0, timerCallback);
     //xTimerStart(my_handle, 0);
-//	for(;;){
-//		delayuS_Ale(1000000);
-//		FF_PRINTF("1 second elapsed\r\n");
-//	}
 
 	//TODO: my counter is counting 5 times slower
     for(;;) {
-		Trig_low; 											//turn off trig
+//		Trig_low; 											//turn off trig
 		Trig_high;  										//turn on trig
-		delayuS(10);
+		delayuS(1);
 		Trig_low;
-		dur = read_echo(400000); 			//measure the time of echo pin in us
-		distance = dur * 0.01715 * ERROR_FACTOR;		//distance = (duration/2) * SOUND_SPEED
-		if(xSemaphoreTake(printMutex, (TickType_t)10) == pdTRUE) {
-		    FF_PRINTF("Distance %f cm\r\n", distance);
-		    xSemaphoreGive(printMutex);
-		}
-		delayuS(100*1000);
+		delayuS(1);
+//		dur = read_echo(400000); 			//measure the time of echo pin in us
+//		distance = dur * 0.01715 * ERROR_FACTOR;		//distance = (duration/2) * SOUND_SPEED
+//		if(xSemaphoreTake(printMutex, (TickType_t)10) == pdTRUE) {
+//		    FF_PRINTF("Distance %f cm\r\n", distance);
+//		    xSemaphoreGive(printMutex);
+//		}
+//		delayuS(100*1000);
     }
     vTaskDelete(NULL);
 }

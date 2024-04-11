@@ -12,7 +12,7 @@ void setup_Timer1(){
 	//page 287/844 reference
 	RCC->APB2ENR |= RCC_APB2ENR_TIM1EN; // Enable TIM1 clock, page 121/844 reference
 
-	TIM1->PSC = 16 - 1; // 16 000 000 / (PSC+1) = x000 000, page 306/844 reference
+	TIM1->PSC = 100 - 1; // SysCLK / (PSC+1) = x000 000, page 306/844 reference
 	TIM1->ARR = 1; // 1000 000 / (ARR+1) = x000000, page 306/844 reference
 	TIM1->CNT = 0; // page 306/844 reference
 	TIM1->CR1 = (1<<0); //page 287/844 reference
