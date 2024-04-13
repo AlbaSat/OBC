@@ -30,21 +30,22 @@ extern "C" {
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx_hal_tim.h"
+#include "stm32f4xx.h"
+
 #include "FreeRTOS.h"
 #include "FreeRTOSConfig.h"
-#include "FreeRTOSFATConfig.h"
-#include "task.h"
 #include "projdefs.h"
 #include "portmacro.h"
+#include "task.h"
 #include "timers.h"
+
+#include "FreeRTOSFATConfig.h"
 #include "ff_ramdisk.h"
 #include "ff_stdio.h"
-#include "task2_ale.h"
-#include "task1_ale.h"
+
 #include "timer_utils.h"
-#include "stm32f4xx.h"
+#include "task1_ale.h"
+#include "task2_ale.h"
 
 
 /* Private includes ----------------------------------------------------------*/
