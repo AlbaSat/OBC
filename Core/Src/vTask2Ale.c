@@ -3,7 +3,7 @@
 #define Trig_high		GPIOA->BSRR=GPIO_BSRR_BS_0 			// turn on 	PA0 (trig pin)
 #define Trig_low		GPIOA->BSRR=GPIO_BSRR_BR_0 			// turn off PA0 (trig pin)
 
-#define us_per_Tick 3	//50% error (3us instead of 2us with the oscilloscope) due to use of HSI
+#define us_per_Tick 2.7f	//34% error (2.68us instead of 2us with the oscilloscope)
 
 uint32_t numTicks;
 
@@ -14,17 +14,17 @@ float distance;
 extern SemaphoreHandle_t printMutex;
 
 volatile void vTask2Ale(void *pvParameters){
-    //TimerHandle_t my_handle = xTimerCreate("MyTimer", pdMS_TO_TICKS(1000), pdTRUE, 0, timerCallback);
-    //xTimerStart(my_handle, 0);
 
     for(;;) {
 //		//Set TRIG to LOW for few us
 //		HAL_GPIO_WritePin(TRIG_GPIO_Port, TRIG_Pin, GPIO_PIN_RESET);
 //		delayuS(3);
 
-		HAL_GPIO_WritePin(TRIG_GPIO_Port, TRIG_Pin, GPIO_PIN_SET);
+		//HAL_GPIO_WritePin(TRIG_GPIO_Port, TRIG_Pin, GPIO_PIN_SET);
+    	Trig_high;
 		delayuS(2);
-		HAL_GPIO_WritePin(TRIG_GPIO_Port, TRIG_Pin, GPIO_PIN_RESET);
+		//HAL_GPIO_WritePin(TRIG_GPIO_Port, TRIG_Pin, GPIO_PIN_RESET);
+		Trig_low;
 		delayuS(2);
 //
 //		//Wait for pulse to arrive
