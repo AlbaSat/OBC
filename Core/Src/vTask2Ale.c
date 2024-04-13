@@ -3,7 +3,7 @@
 #define Trig_high		GPIOA->BSRR=GPIO_BSRR_BS_0 			// turn on 	PA0 (trig pin)
 #define Trig_low		GPIOA->BSRR=GPIO_BSRR_BR_0 			// turn off PA0 (trig pin)
 
-#define ERROR_FACTOR  5;
+#define ERROR_FACTOR  1.4f;
 
 volatile uint32_t dur=0;
 double distance;
@@ -14,12 +14,11 @@ volatile void vTask2Ale(void *pvParameters){
     //TimerHandle_t my_handle = xTimerCreate("MyTimer", pdMS_TO_TICKS(1000), pdTRUE, 0, timerCallback);
     //xTimerStart(my_handle, 0);
 
-	//TODO: my counter is counting 5 times slower
     for(;;) {
-    	Trig_high;
-		delayuS(1);
-		Trig_low;
-		delayuS(1);
+    	HAL_GPIO_WritePin(TRIG_GPIO_Port, TRIG_Pin, GPIO_PIN_SET);
+    	delayuS(10);
+    	HAL_GPIO_WritePin(TRIG_GPIO_Port, TRIG_Pin, GPIO_PIN_RESET);
+    	delayuS(10);
 //		dur = read_echo(400000); 			//measure the time of echo pin in us
 //		distance = dur * 0.01715 * ERROR_FACTOR;		//distance = (duration/2) * SOUND_SPEED
 //		if(xSemaphoreTake(printMutex, (TickType_t)10) == pdTRUE) {
