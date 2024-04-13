@@ -31,6 +31,7 @@ extern "C" {
 #include <stdio.h>
 
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_tim.h"
 #include "FreeRTOS.h"
 #include "FreeRTOSConfig.h"
 #include "FreeRTOSFATConfig.h"
@@ -74,6 +75,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define TRIG_Pin GPIO_PIN_0
+#define TRIG_GPIO_Port GPIOA
+#define ECHO_Pin GPIO_PIN_1
+#define ECHO_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 
