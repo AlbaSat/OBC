@@ -16,8 +16,7 @@ volatile void vTask2Ale(void *pvParameters){
 
 	//TODO: my counter is counting 5 times slower
     for(;;) {
-//		Trig_low; 											//turn off trig
-		Trig_high;  										//turn on trig
+    	Trig_high;
 		delayuS(1);
 		Trig_low;
 		delayuS(1);
