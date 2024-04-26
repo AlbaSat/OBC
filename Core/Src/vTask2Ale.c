@@ -33,7 +33,7 @@ volatile void vTask2Ale(void *pvParameters){
 		numTicks = 0;
 		while(GPIOA->IDR & GPIO_PIN_1){
 		  numTicks++;
-		  delayuS(2);	//TODO measure this delay that each tick is taking; for now put 2.8
+		  delayuS(2);
 		}
 
 		//Estimate distance

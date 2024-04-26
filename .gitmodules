@@ -4,3 +4,6 @@
 [submodule "Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT"]
 	path = Middlewares/Third_Party/Lab-Project-FreeRTOS-FAT
 	url = https://github.com/FreeRTOS/Lab-Project-FreeRTOS-FAT.git
+[submodule "Libraries/libcsp"]
+	path = Libraries/libcsp
+	url = https://github.com/libcsp/libcsp.git

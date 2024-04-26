@@ -124,7 +124,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
 
-  //xTaskCreate(vTaskAle, "Task RAM", 1024, NULL, 3, NULL);
+  xTaskCreate(vTaskAle, "Task RAM", 1024, NULL, 3, NULL);
   xTaskCreate(vTask2Ale, "Task ECHO", 1024, NULL, 3, NULL);
 
   /* USER CODE END RTOS_THREADS */
