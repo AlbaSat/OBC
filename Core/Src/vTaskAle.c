@@ -33,10 +33,10 @@ void vTaskAle(void *pvParameters)
 	change_ok = ff_chdir("/ram/firstSub");
 
 	//Create mock file
-	int my_file = 0;
+	FF_FILE* my_file = 0;
 	my_file = ff_fopen("./a.txt", "a+");
 
-	size_t written_items = 0;
+	size_t written_items;
 	char * hello;
 	if(my_file != NULL){
 		//Write on it

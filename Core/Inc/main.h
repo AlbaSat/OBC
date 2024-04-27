@@ -47,6 +47,8 @@ extern "C" {
 #include "task1_ale.h"
 #include "task2_ale.h"
 
+#include "csp.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

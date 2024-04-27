@@ -43,6 +43,9 @@ volatile void vTask2Ale(void *pvParameters){
 			xSemaphoreGive(printMutex);
 		}
 
+		//Create CSP packet
+		csp_packet_t* packet = csp_buffer_get(sizeof(float));
+
 		HAL_Delay(100);
     }
     vTaskDelete(NULL);

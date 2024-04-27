@@ -74,6 +74,9 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
+    // Initialize the CSP library
+	csp_init();
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
