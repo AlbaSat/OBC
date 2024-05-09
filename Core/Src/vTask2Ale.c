@@ -15,6 +15,9 @@ extern SemaphoreHandle_t printMutex;
 
 volatile void vTask2Ale(void *pvParameters){
 
+	//Create new connection
+	csp_conn_t *conn = csp_conn_new(CSP_PRIO_NORM);
+
     for(;;) {
 		//Set TRIG to LOW for few us
 		HAL_GPIO_WritePin(TRIG_GPIO_Port, TRIG_Pin, GPIO_PIN_RESET);
@@ -45,6 +48,11 @@ volatile void vTask2Ale(void *pvParameters){
 
 		//Create CSP packet
 		csp_packet_t* packet = csp_buffer_get(sizeof(float));
+		if (packet != NULL) {
+		            memcpy(packet->data, &distance, sizeof(float));
+		            packet->length = sizeof(float);
+		            csp_send(conn, packet);
+		        }
 
 		HAL_Delay(100);
     }

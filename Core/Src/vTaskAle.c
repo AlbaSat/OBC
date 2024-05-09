@@ -12,6 +12,10 @@ extern SemaphoreHandle_t printMutex;
 
 void vTaskAle(void *pvParameters)
 {
+	//Setup the CSP socket to receive stuff
+    csp_conn_t *conn = csp_conn_new(CSP_PRIO_NORM);
+    csp_bind(conn, CSP_ANY);
+
 	//Create RAM disk
 	FF_Disk_t * disk_ale;
 	static uint8_t buffer_ale[RAMDISK_SECTOR_SIZE * RAMDISK_SECTOR_COUNT] = {0};
@@ -50,7 +54,15 @@ void vTaskAle(void *pvParameters)
 
 	for(;;)
 	{
-		//HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
+		//TODO: this pops the timeout
+		//Receive the packet
+		csp_packet_t *packet = csp_read(conn, 1000);
+		        if (packet != NULL) {
+		            float received_value;
+		            memcpy(&received_value, packet->data, sizeof(float));
+		            csp_buffer_free(packet);
+		            FF_PRINTF("Froma task FAT I received %f", received_value);
+		        }
 
 		char* read_buffer = pvPortMalloc(50);
 		my_file = ff_fopen("./a.txt", "r");
