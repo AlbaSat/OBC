@@ -18,6 +18,7 @@ volatile void vTask2Ale(void *pvParameters){
 	//Connect acting like a sender
 	csp_conn_t *conn = csp_connect(CSP_PRIO_NORM, NODE_ADDRESS_RECEIVER, CSP_PORT, CSP_DEF_TIMEOUT, CSP_O_NONE);
 
+	vTaskDelay(pdMS_TO_TICKS(5000));
 
     for(;;) {
 		//Set TRIG to LOW for few us
@@ -55,10 +56,11 @@ volatile void vTask2Ale(void *pvParameters){
 		            csp_send(conn, packet);
 		        }
 
-        // Close the connection
-        csp_close(conn);
+	    // Close the connection
+	    csp_close(conn);
 
 		HAL_Delay(100);
     }
+
     vTaskDelete(NULL);
 }

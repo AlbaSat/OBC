@@ -16,11 +16,20 @@ void vTaskAle(void *pvParameters)
     csp_socket_t sock = {0};
     csp_conn_t *conn;
     csp_packet_t *packet;
+    int my_error;
 
-    csp_bind(&sock, CSP_ANY);
+    my_error = csp_bind(&sock, CSP_ANY);
+    if(my_error == CSP_ERR_NONE){
+    	FF_PRINTF("Bound correctly \n\r");
+    }
 
     // Set the socket to listen for incoming connections
-    csp_listen(&sock, 10);
+    my_error = csp_listen(&sock, 10);
+    if(my_error == CSP_ERR_NONE){
+    	FF_PRINTF("Listening correctly \n\r");
+    }
+
+	vTaskDelay(pdMS_TO_TICKS(5000));
 
 	//Create RAM disk
 	FF_Disk_t * disk_ale;
@@ -60,13 +69,15 @@ void vTaskAle(void *pvParameters)
 
 	for(;;)
 	{
-		//Receive the packet
-
-        // Wait for a connection
-        conn = csp_accept(&sock, CSP_DEF_TIMEOUT);
+		// TODO: this always times out
+		if ((conn = csp_accept(&sock, CSP_DEF_TIMEOUT)) == NULL) {
+			/* timeout */
+			FF_PRINTF("Timed out \n\r");
+			continue;
+		}
 
         // Read the packet
-        packet = csp_read(conn, 1000);
+        packet = csp_read(conn, CSP_DEF_TIMEOUT);
 
         // Extract the float variable from the packet
         float received_distance;
@@ -89,11 +100,12 @@ void vTaskAle(void *pvParameters)
 
 		vPortFree(read_buffer);
 
-        // Close the connection
-        csp_close(conn);
+	    // Close the connection
+	    csp_close(conn);
 
 		vTaskDelay(pdMS_TO_TICKS(100));
 
 	}
+
 	vTaskDelete(NULL);
 }
