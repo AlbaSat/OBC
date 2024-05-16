@@ -127,8 +127,14 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
 
-  xTaskCreate(vTaskAle, "Task RAM", 1024, NULL, 3, NULL);
-  xTaskCreate(vTask2Ale, "Task ECHO", 1024, NULL, 3, NULL);
+  //xTaskCreate(vTaskAle, "Task RAM", 1024, NULL, 3, NULL);
+  //xTaskCreate(vTask2Ale, "Task ECHO", 1024, NULL, 3, NULL);
+
+  struct Server_Args my_args = {13, 10};
+  struct Server_Args my_args_1 = {13, 10};
+
+  xTaskCreate(vCSP_Server, "Task Server", 1024, NULL, 3, NULL);
+  xTaskCreate(vCSP_Client, "Task Client", 1024, NULL, 3, NULL);
 
   /* USER CODE END RTOS_THREADS */
 

@@ -48,6 +48,8 @@ extern "C" {
 #include "task2_ale.h"
 
 #include "csp.h"
+#include "CSP_Server_Task.h"
+#include "CSP_Client_Task.h"
 
 
 /* Private includes ----------------------------------------------------------*/
@@ -93,6 +95,13 @@ void Error_Handler(void);
 #define CSP_PORT 10
 //Default timeout
 #define CSP_DEF_TIMEOUT 1000
+
+#define NODE_ADDRESS_SERVER  13
+
+struct Server_Args{
+	uint32_t Server_Address;
+	uint32_t Server_Port;
+};
 
 /* USER CODE BEGIN Private defines */
 
