@@ -78,10 +78,21 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+
+// ULTRASONIC SENSOR DEFINES
 #define TRIG_Pin GPIO_PIN_0
 #define TRIG_GPIO_Port GPIOA
 #define ECHO_Pin GPIO_PIN_1
 #define ECHO_GPIO_Port GPIOA
+
+//libcsp DEFINES
+// Define the addresses of the nodes
+#define NODE_ADDRESS_SENDER  1
+#define NODE_ADDRESS_RECEIVER 2
+// Define the port for communication
+#define CSP_PORT 10
+//Default timeout
+#define CSP_DEF_TIMEOUT 1000
 
 /* USER CODE BEGIN Private defines */
 

@@ -75,7 +75,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
 
     // Initialize the CSP library
-	csp_init();
+    csp_init();
 
   /* USER CODE END 1 */
 
