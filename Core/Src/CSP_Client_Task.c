@@ -14,7 +14,7 @@ void vCSP_Client(void *pvParameters){
 	{
 		/* Send ping to server, timeout 1000 mS, ping size 100 bytes */
 		int result = csp_ping(NODE_ADDRESS_SERVER, 1000, 100, CSP_O_NONE);
-		printf("Ping address with result in [mS]\n", strlen("Ping address with result in [mS]\n"));
+		printf("Ping address with result in [mS]: %d \n\r", result);
 //        char message[4];
 //        snprintf(message,"%d",result);
 //        printf(message,4);
