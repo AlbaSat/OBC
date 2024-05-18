@@ -25,7 +25,7 @@ https://lindevs.com/install-arm-gnu-toolchain-on-ubuntu
 
 
 7a) Go to STM32CUBEIDE and inside Project -> Properties -> C/C++ General -> Tool Settings -> MCU GCC Linker ->
-	Miscellaneous -> Other flags -> "-lcsp"
+	Miscellaneous -> Other flags -> "-Wl,--whole-archive -lcsp -Wl,--no-whole-archive"
 
 
 7b) Go to STM32CUBEIDE and inside Project -> Properties -> C/C++ General -> Tool Settings -> MCU GCC Linker ->
