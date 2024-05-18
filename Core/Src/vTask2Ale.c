@@ -15,8 +15,6 @@ extern SemaphoreHandle_t printMutex;
 
 volatile void vTask2Ale(void *pvParameters){
 
-	vTaskDelay(pdMS_TO_TICKS(5000));
-
     for(;;) {
     	//Connect acting like a sender
     	csp_conn_t *conn = csp_connect(CSP_PRIO_NORM, NODE_ADDRESS_RECEIVER, CSP_PORT, 50, CSP_O_NONE);

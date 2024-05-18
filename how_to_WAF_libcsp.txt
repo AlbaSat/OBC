@@ -13,7 +13,7 @@ https://lindevs.com/install-arm-gnu-toolchain-on-ubuntu
 
 4) Launch the following WAF config command (with ur directories ofc)
 
-./waf configure --toolchain=arm-none-eabi- --with-os=freertos --prefix=/mnt/c/Users/Alessandro/STM32CubeIDE/workspace_1.13.2/OBC/Libraries --includes=/mnt/c/Users/Alessandro/STM32CubeIDE/workspace_1.13.2/OBC/Middlewares/Third_Party/FreeRTOS-Kernel/include,/mnt/c/Users/Alessandro/STM32CubeIDE/workspace_1.13.2/OBC/Core/Inc,/mnt/c/Users/Alessandro/STM32CubeIDE/workspace_1.13.2/OBC/Middlewares/Third_Party/FreeRTOS-Kernel/portable/GCC/ARM_CM4F -v CFLAGS="-mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16"
+./waf configure --toolchain=arm-none-eabi- --with-os=freertos --prefix=/mnt/c/Users/Alessandro/STM32CubeIDE/workspace_1.13.2/OBC/Libraries --includes=/mnt/c/Users/Alessandro/STM32CubeIDE/workspace_1.13.2/OBC/Middlewares/Third_Party/FreeRTOS-Kernel/include,/mnt/c/Users/Alessandro/STM32CubeIDE/workspace_1.13.2/OBC/Core/Inc,/mnt/c/Users/Alessandro/STM32CubeIDE/workspace_1.13.2/OBC/Middlewares/Third_Party/FreeRTOS-Kernel/portable/GCC/ARM_CM4F -v CFLAGS="-mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -g"
 
 
 5) Launch the following WAF build command

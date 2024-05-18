@@ -74,8 +74,8 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-    // Initialize the CSP library
-    csp_init();
+  // Initialize the CSP library
+  csp_init();
 
   /* USER CODE END 1 */
 
@@ -130,11 +130,11 @@ int main(void)
   //xTaskCreate(vTaskAle, "Task RAM", 1024, NULL, 3, NULL);
   //xTaskCreate(vTask2Ale, "Task ECHO", 1024, NULL, 3, NULL);
 
-  struct Server_Args my_args = {13, 10};
-  struct Server_Args my_args_1 = {13, 10};
+  //struct Server_Args my_args = {13, 10};
+  //struct Server_Args my_args_1 = {13, 10};
 
-  xTaskCreate(vCSP_Server, "Task Server", 1024, NULL, 3, NULL);
-  xTaskCreate(vCSP_Client, "Task Client", 1024, NULL, 3, NULL);
+  xTaskCreate(vCSP_Server, "Task Server", 2048, NULL, 3, NULL);
+  xTaskCreate(vCSP_Client, "Task Client", 2048, NULL, 3, NULL);
 
   /* USER CODE END RTOS_THREADS */
 

@@ -29,8 +29,6 @@ void vTaskAle(void *pvParameters)
     	FF_PRINTF("Listening correctly \n\r");
     }
 
-	vTaskDelay(pdMS_TO_TICKS(5000));
-
 	//Create RAM disk
 	FF_Disk_t * disk_ale;
 	static uint8_t buffer_ale[RAMDISK_SECTOR_SIZE * RAMDISK_SECTOR_COUNT] = {0};
