@@ -5,10 +5,10 @@
  *      Author: Alessandro
  */
 
-#ifndef INC_CSP_CLIENT_TASK_H_
-#define INC_CSP_CLIENT_TASK_H_
+#ifndef INC_VCSP_CLIENT_H_
+#define INC_VCSP_CLIENT_H_
 
 
 void vCSP_Client(void *pvParameters);
 
-#endif /* INC_CSP_CLIENT_TASK_H_ */
+#endif /* INC_VCSP_CLIENT_H_ */

@@ -4,8 +4,8 @@
  *  Created on: May 16, 2024
  *      Author: Alessandro
  */
+#include <vCSP_Server.h>
 #include "main.h"
-#include "CSP_Server_Task.h"
 
 int my_error = 0;
 
@@ -47,7 +47,7 @@ void vCSP_Server(void *pvParameters){
 //		}
 
 		/* Close current connection */
-		csp_close(conn);
+		//csp_close(conn);
 
 		vTaskDelay(pdMS_TO_TICKS(100));
 	}

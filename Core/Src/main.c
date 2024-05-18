@@ -76,6 +76,7 @@ int main(void)
 
   // Initialize the CSP library
   csp_init();
+  // TODO: add an interface
 
   /* USER CODE END 1 */
 
@@ -133,7 +134,7 @@ int main(void)
   //struct Server_Args my_args = {13, 10};
   //struct Server_Args my_args_1 = {13, 10};
 
-  xTaskCreate(vCSP_Server, "Task Server", 2048, NULL, 3, NULL);
+  //xTaskCreate(vCSP_Server, "Task Server", 2048, NULL, 3, NULL);
   xTaskCreate(vCSP_Client, "Task Client", 2048, NULL, 3, NULL);
 
   /* USER CODE END RTOS_THREADS */
@@ -331,7 +332,7 @@ void StartDefaultTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    vTaskDelay(1);
   }
   /* USER CODE END 5 */
 }

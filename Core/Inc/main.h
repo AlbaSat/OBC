@@ -48,8 +48,8 @@ extern "C" {
 #include "task2_ale.h"
 
 #include "csp.h"
-#include "CSP_Server_Task.h"
-#include "CSP_Client_Task.h"
+#include <vCSP_Server.h>
+#include <vCSP_Client.h>
 
 
 /* Private includes ----------------------------------------------------------*/
@@ -96,7 +96,7 @@ void Error_Handler(void);
 //Default timeout
 #define CSP_DEF_TIMEOUT 1000
 
-#define NODE_ADDRESS_SERVER  13
+#define NODE_ADDRESS_SERVER  255
 
 struct Server_Args{
 	uint32_t Server_Address;
