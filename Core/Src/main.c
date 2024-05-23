@@ -53,6 +53,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_USART2_UART_Init(void);
+void my_interface_setup(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -317,29 +318,46 @@ int _write(int fd, char * ptr, int len)
 	return len;
 }
 
-void my_interface_setup(){
-	/* Add interface(s) */
-	    csp_iface_t *default_iface = NULL;
+void my_interface_setup() {
+    /* Add interface(s) */
+    csp_iface_t *default_iface = NULL;
 
-	    // Create the CSP interface
-	    csp_iface_t csp_i2c_if;
-	    csp_i2c_interface_data_t csp_i2c_data;
+    // Create the CSP interface data structure
+    csp_i2c_interface_data_t csp_i2c_data = {
+        .tx_func = csp_i2c_tx
+    };
 
-	    // Set the interface name and driver functions
-	    csp_i2c_if.name = CSP_IF_I2C_DEFAULT_NAME;
-	    csp_i2c_data.tx_func = csp_i2c_tx;
-	    csp_i2c_if.interface_data = &csp_i2c_data;
+    // Create the CSP interface
+    csp_iface_t csp_i2c_if = {
+        .addr = CSP_I2C_ADDRESS,
+        .netmask = CSP_I2C_NETMASK,
+        .name = CSP_IF_I2C_DEFAULT_NAME,
+        .interface_data = &csp_i2c_data,
+        .driver_data = NULL,
+        .nexthop = csp_i2c_tx,
+        .is_default = 1,
+        .tx = 0,
+        .rx = 0,
+        .tx_error = 0,
+        .rx_error = 0,
+        .drop = 0,
+        .autherr = 0,
+        .frame = 0,
+        .txbytes = 0,
+        .rxbytes = 0,
+        .irq = 0,
+        .next = NULL
+    };
 
-	    // Add the interface to libcsp
-	    int error = csp_i2c_add_interface(&csp_i2c_if);
-	    if (error != CSP_ERR_NONE) {
-	        csp_print("Failed to add I2C interface, error: %d\n", error);
-	        exit(1);
-	    }
+    // Add the interface to libcsp
+    int error = csp_i2c_add_interface(&csp_i2c_if);
+    if (error != CSP_ERR_NONE) {
+        csp_print("Failed to add I2C interface, error: %d\n", error);
+        exit(1);
+    }
 
-	    default_iface = &csp_i2c_if;
+    default_iface = &csp_i2c_if;
 }
-
 
 /* USER CODE END 4 */
 

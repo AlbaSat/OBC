@@ -99,6 +99,11 @@ void Error_Handler(void);
 
 #define NODE_ADDRESS_SERVER  255
 
+//I2C params
+#define CSP_I2C_ADDRESS         1
+#define CSP_I2C_NETMASK         0xFE
+#define CSP_IF_I2C_DEFAULT_NAME "I2C"
+
 struct Server_Args{
 	uint32_t Server_Address;
 	uint32_t Server_Port;
