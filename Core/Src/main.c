@@ -65,6 +65,8 @@ void my_interface_setup(void);
 //MUTEX for the FF_PRINTF of the 2 tasks
 SemaphoreHandle_t printMutex;
 
+SemaphoreHandle_t csp_usart_Mutex;
+
 /* USER CODE END 0 */
 
 /**
