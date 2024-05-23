@@ -319,44 +319,44 @@ int _write(int fd, char * ptr, int len)
 }
 
 void my_interface_setup() {
-    /* Add interface(s) */
-    csp_iface_t *default_iface = NULL;
-
-    // Create the CSP interface data structure
-    csp_i2c_interface_data_t csp_i2c_data = {
-        .tx_func = csp_i2c_tx
+    // Create and initialize the CSP KISS interface data structure
+    static csp_kiss_interface_data_t csp_kiss_data = {
+        .tx_func = kiss_uart_tx,
+        .rx_mode = KISS_MODE_NOT_STARTED,
+        .rx_length = 0,
+        .rx_first = true,
+        .rx_packet = NULL
     };
 
     // Create the CSP interface
-    csp_iface_t csp_i2c_if = {
-        .addr = CSP_I2C_ADDRESS,
-        .netmask = CSP_I2C_NETMASK,
-        .name = CSP_IF_I2C_DEFAULT_NAME,
-        .interface_data = &csp_i2c_data,
-        .driver_data = NULL,
-        .nexthop = csp_i2c_tx,
-        .is_default = 1,
-        .tx = 0,
-        .rx = 0,
-        .tx_error = 0,
-        .rx_error = 0,
-        .drop = 0,
-        .autherr = 0,
-        .frame = 0,
-        .txbytes = 0,
-        .rxbytes = 0,
-        .irq = 0,
-        .next = NULL
-    };
+       static csp_iface_t csp_kiss_if = {
+           .addr = 1, // Set your desired CSP address
+           .netmask = 255, // Set your desired netmask
+           .name = "KISS", // Name of the interface
+           .interface_data = &csp_kiss_data,
+           .driver_data = NULL,
+           .nexthop = csp_kiss_tx,
+           .is_default = 1,
+           .tx = 0,
+           .rx = 0,
+           .tx_error = 0,
+           .rx_error = 0,
+           .drop = 0,
+           .autherr = 0,
+           .frame = 0,
+           .txbytes = 0,
+           .rxbytes = 0,
+           .irq = 0,
+           .next = NULL
+       };
 
     // Add the interface to libcsp
-    int error = csp_i2c_add_interface(&csp_i2c_if);
+    int error = csp_kiss_add_interface(&csp_kiss_if);
     if (error != CSP_ERR_NONE) {
-        csp_print("Failed to add I2C interface, error: %d\n", error);
+        csp_print("Failed to add KISS interface, error: %d\n", error);
         exit(1);
     }
 
-    default_iface = &csp_i2c_if;
 }
 
 /* USER CODE END 4 */

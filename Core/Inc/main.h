@@ -48,9 +48,10 @@ extern "C" {
 #include "task2_ale.h"
 
 #include "csp.h"
-#include "csp_if_i2c.h"
+#include "csp_if_kiss.h"
 #include <vCSP_Server.h>
 #include <vCSP_Client.h>
+#include <kiss_uart_interface.h>
 
 
 /* Private includes ----------------------------------------------------------*/
@@ -98,11 +99,6 @@ void Error_Handler(void);
 #define CSP_DEF_TIMEOUT 1000
 
 #define NODE_ADDRESS_SERVER  255
-
-//I2C params
-#define CSP_I2C_ADDRESS         1
-#define CSP_I2C_NETMASK         0xFE
-#define CSP_IF_I2C_DEFAULT_NAME "I2C"
 
 struct Server_Args{
 	uint32_t Server_Address;
