@@ -28,23 +28,10 @@ void vCSP_Server(void *pvParameters){
 		}
 
 		/* Read packets on connection, timout is 100 mS */
-//		csp_packet_t *packet;
-//		while ((packet = csp_read(conn, 50)) != NULL) {
-//			switch (csp_conn_dport(conn)) {
-//			case CSP_PORT:
-//				/* Process packet here */
-//				printf("Packet received on CSP_PORT:",strlen("Packet received on CSP_PORT:"));
-//                printf((char *) packet->data,packet->length);
-//                printf("\r\n",strlen("\r\n"));
-//				csp_buffer_free(packet);
-//				break;
-//
-//			default:
-//				/* Call the default CSP service handler, handle pings, buffer use, etc. */
-//				csp_service_handler(packet);
-//				break;
-//			}
-//		}
+		csp_packet_t *packet;
+		while ((packet = csp_read(conn, 50)) != NULL) {
+			csp_service_handler(packet);
+		}
 
 		/* Close current connection */
 		//csp_close(conn);

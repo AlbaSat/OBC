@@ -79,8 +79,6 @@ int main(void)
 
   // Initialize the CSP library
   csp_init();
-  // TODO: add an interface
-  my_interface_setup();
 
   /* USER CODE END 1 */
 
@@ -108,6 +106,10 @@ int main(void)
 
   //Blast HSE on PA8 iutput pin in order to measure the actual clock frequency with the oscillo
   HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_PLLCLK, RCC_MCODIV_5);
+
+  // TODO: add an interface
+  //my_interface_setup();
+
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -138,7 +140,7 @@ int main(void)
   //struct Server_Args my_args = {13, 10};
   //struct Server_Args my_args_1 = {13, 10};
 
-  //xTaskCreate(vCSP_Server, "Task Server", 2048, NULL, 3, NULL);
+  xTaskCreate(vCSP_Server, "Task Server", 2048, NULL, 3, NULL);
   xTaskCreate(vCSP_Client, "Task Client", 2048, NULL, 3, NULL);
 
   /* USER CODE END RTOS_THREADS */
