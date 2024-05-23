@@ -77,6 +77,7 @@ int main(void)
   // Initialize the CSP library
   csp_init();
   // TODO: add an interface
+  my_interface_setup();
 
   /* USER CODE END 1 */
 
@@ -314,6 +315,29 @@ int _write(int fd, char * ptr, int len)
 {
 	HAL_UART_Transmit(&huart2, (uint8_t *)ptr, len, HAL_MAX_DELAY);
 	return len;
+}
+
+void my_interface_setup(){
+	/* Add interface(s) */
+	    csp_iface_t *default_iface = NULL;
+
+	    // Create the CSP interface
+	    csp_iface_t csp_i2c_if;
+	    csp_i2c_interface_data_t csp_i2c_data;
+
+	    // Set the interface name and driver functions
+	    csp_i2c_if.name = CSP_IF_I2C_DEFAULT_NAME;
+	    csp_i2c_data.tx_func = csp_i2c_tx;
+	    csp_i2c_if.interface_data = &csp_i2c_data;
+
+	    // Add the interface to libcsp
+	    int error = csp_i2c_add_interface(&csp_i2c_if);
+	    if (error != CSP_ERR_NONE) {
+	        csp_print("Failed to add I2C interface, error: %d\n", error);
+	        exit(1);
+	    }
+
+	    default_iface = &csp_i2c_if;
 }
 
 

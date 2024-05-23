@@ -48,6 +48,7 @@ extern "C" {
 #include "task2_ale.h"
 
 #include "csp.h"
+#include "csp_if_i2c.h"
 #include <vCSP_Server.h>
 #include <vCSP_Client.h>
 
