@@ -112,7 +112,7 @@ int main(void)
   HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_PLLCLK, RCC_MCODIV_5);
 
   // TODO: add an interface
-  //my_interface_setup();
+  my_interface_setup();
 
   /* USER CODE END 2 */
 
@@ -360,45 +360,22 @@ int _write(int fd, char * ptr, int len)
 	return len;
 }
 
-void my_interface_setup() {
-    // Create and initialize the CSP KISS interface data structure
-    static csp_kiss_interface_data_t csp_kiss_data = {
-        .tx_func = kiss_uart_tx,
-        .rx_mode = KISS_MODE_NOT_STARTED,
-        .rx_length = 0,
-        .rx_first = true,
-        .rx_packet = NULL
-    };
+//CSP interface setup for I2C communication
+void my_interface_setup(void) {
+    // Initialize I2C peripheral
+    MX_I2C1_Init(); // Adjust according to your I2C initialization function
 
-    // Create the CSP interface
-       static csp_iface_t csp_kiss_if = {
-           .addr = 1, // Set your desired CSP address
-           .netmask = 255, // Set your desired netmask
-           .name = "KISS", // Name of the interface
-           .interface_data = &csp_kiss_data,
-           .driver_data = NULL,
-           .nexthop = csp_kiss_tx,
-           .is_default = 1,
-           .tx = 0,
-           .rx = 0,
-           .tx_error = 0,
-           .rx_error = 0,
-           .drop = 0,
-           .autherr = 0,
-           .frame = 0,
-           .txbytes = 0,
-           .rxbytes = 0,
-           .irq = 0,
-           .next = NULL
-       };
+    // Initialize CSP I2C interface
+    csp_iface_t *iface = csp_i2c_init(&hi2c1, CSP_I2C_ADDRESS, CSP_I2C_BITRATE);
 
-    // Add the interface to libcsp
-    int error = csp_kiss_add_interface(&csp_kiss_if);
-    if (error != CSP_ERR_NONE) {
-        csp_print("Failed to add KISS interface, error: %d\n", error);
-        exit(1);
+    // Check if the interface was initialized successfully
+    if (iface == NULL) {
+        printf("Failed to initialize CSP I2C interface\n");
+        return;
     }
 
+    // Set the default route to the I2C interface
+    csp_route_set(0, iface, CSP_NODE_ADDRESS);
 }
 
 /* USER CODE END 4 */

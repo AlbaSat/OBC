@@ -52,6 +52,7 @@ extern "C" {
 #include <vCSP_Server.h>
 #include <vCSP_Client.h>
 #include <kiss_uart_interface.h>
+#include "csp_i2c_settings.h"
 
 
 /* Private includes ----------------------------------------------------------*/
