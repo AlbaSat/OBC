@@ -12,5 +12,6 @@
 #define CSP_I2C_BITRATE 100000
 #define CSP_NODE_ADDRESS 0x01
 
+int my_i2c_tx(void *driver_data, csp_packet_t *packet);
 
 #endif /* INC_CSP_I2C_SETTINGS_H_ */

@@ -360,22 +360,36 @@ int _write(int fd, char * ptr, int len)
 	return len;
 }
 
-//CSP interface setup for I2C communication
+/**
+  * @brief CSP interface setup for I2C communication
+  * @param None
+  * @retval None
+  */
 void my_interface_setup(void) {
     // Initialize I2C peripheral
-    MX_I2C1_Init(); // Adjust according to your I2C initialization function
+    MX_I2C1_Init();
 
-    // Initialize CSP I2C interface
-    csp_iface_t *iface = csp_i2c_init(&hi2c1, CSP_I2C_ADDRESS, CSP_I2C_BITRATE);
+    // Define the CSP I2C interface
+    static csp_iface_t csp_i2c_iface;
+    static csp_i2c_interface_data_t i2c_interface_data;
 
-    // Check if the interface was initialized successfully
-    if (iface == NULL) {
-        printf("Failed to initialize CSP I2C interface\n");
+    // Set the I2C driver transmit function
+    i2c_interface_data.tx_func = my_i2c_tx;
+
+    // Set up the CSP interface
+    csp_i2c_iface.name = CSP_IF_I2C_DEFAULT_NAME;
+    csp_i2c_iface.interface_data = &i2c_interface_data;
+    csp_i2c_iface.driver_data = &hi2c1; // Pass the I2C handle
+    csp_i2c_iface.nexthop = csp_i2c_tx;
+
+    // Add the interface to CSP
+    if (csp_i2c_add_interface(&csp_i2c_iface) != CSP_ERR_NONE) {
+        printf("Failed to add CSP I2C interface\n");
         return;
     }
 
-    // Set the default route to the I2C interface
-    csp_route_set(0, iface, CSP_NODE_ADDRESS);
+    // Optional: Set the interface as default
+    csp_i2c_iface.is_default = 1;
 }
 
 /* USER CODE END 4 */

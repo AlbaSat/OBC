@@ -31,6 +31,7 @@ extern "C" {
 #include <stdio.h>
 
 #include "stm32f4xx.h"
+#include "stm32f4xx_hal_conf.h"
 
 #include "FreeRTOS.h"
 #include "FreeRTOSConfig.h"
@@ -52,6 +53,7 @@ extern "C" {
 #include <vCSP_Server.h>
 #include <vCSP_Client.h>
 #include <kiss_uart_interface.h>
+#include "csp/interfaces/csp_if_i2c.h"
 #include "csp_i2c_settings.h"
 
 
