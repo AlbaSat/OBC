@@ -102,6 +102,7 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM4_Init();
   MX_USART2_UART_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
   //Blast HSE on PA8 iutput pin in order to measure the actual clock frequency with the oscillo
