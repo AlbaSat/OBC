@@ -54,6 +54,7 @@ extern "C" {
 #include <vCSP_Client.h>
 #include <kiss_uart_interface.h>
 #include "csp/interfaces/csp_if_i2c.h"
+#include "csp/interfaces/csp_if_lo.h"
 #include "csp_i2c_settings.h"
 
 
@@ -93,20 +94,20 @@ void Error_Handler(void);
 #define ECHO_GPIO_Port GPIOA
 
 //libcsp DEFINES
-// Define the addresses of the nodes
-#define NODE_ADDRESS_SENDER  1
-#define NODE_ADDRESS_RECEIVER 2
-// Define the port for communication
-#define CSP_PORT 10
-//Default timeout
-#define CSP_DEF_TIMEOUT 1000
+#define MY_SERVER_PORT  10
+#define SERVER_ADDRESS  255
+#define CSP_DEF_TIMEOUT 100
 
-#define NODE_ADDRESS_SERVER  255
+/* Server port, the port the server listens on for incoming connections from the client. */
+#define MY_SERVER_PORT  10
 
-struct Server_Args{
-	uint32_t Server_Address;
-	uint32_t Server_Port;
-};
+/* Commandline options */
+static uint8_t server_address = 255;
+
+/* Test mode, used for verifying that host & client can exchange packets over the loopback interface */
+static bool test_mode = true;
+static unsigned int server_received = 0;
+static unsigned int run_duration_in_sec = 3;
 
 /* USER CODE BEGIN Private defines */
 

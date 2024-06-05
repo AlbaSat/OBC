@@ -12,23 +12,6 @@ extern SemaphoreHandle_t printMutex;
 
 void vTaskAle(void *pvParameters)
 {
-	//Setup the CSP socket to receive stuff
-    csp_socket_t sock = {0};
-    csp_conn_t *conn;
-    csp_packet_t *packet;
-    int my_error;
-
-    my_error = csp_bind(&sock, CSP_ANY);
-    if(my_error == CSP_ERR_NONE){
-    	FF_PRINTF("Bound correctly \n\r");
-    }
-
-    // Set the socket to listen for incoming connections
-    my_error = csp_listen(&sock, 10);
-    if(my_error == CSP_ERR_NONE){
-    	FF_PRINTF("Listening correctly \n\r");
-    }
-
 	//Create RAM disk
 	FF_Disk_t * disk_ale;
 	static uint8_t buffer_ale[RAMDISK_SECTOR_SIZE * RAMDISK_SECTOR_COUNT] = {0};
@@ -67,23 +50,6 @@ void vTaskAle(void *pvParameters)
 
 	for(;;)
 	{
-		// TODO: this always times out
-		if ((conn = csp_accept(&sock, CSP_DEF_TIMEOUT)) == NULL) {
-			/* timeout */
-			FF_PRINTF("Timed out \n\r");
-			continue;
-		}
-
-        // Read the packet
-        packet = csp_read(conn, CSP_DEF_TIMEOUT);
-
-        // Extract the float variable from the packet
-        float received_distance;
-        memcpy(&received_distance, packet->data, sizeof(float));
-
-        // Print the received distance
-        printf("Received distance: %f\n", received_distance);
-
 		char* read_buffer = pvPortMalloc(50);
 		my_file = ff_fopen("./a.txt", "r");
 		written_items = ff_fread(read_buffer, sizeof(char),//
@@ -97,9 +63,6 @@ void vTaskAle(void *pvParameters)
 		ff_fclose(my_file);
 
 		vPortFree(read_buffer);
-
-	    // Close the connection
-	    csp_close(conn);
 
 		vTaskDelay(pdMS_TO_TICKS(100));
 

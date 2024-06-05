@@ -16,13 +16,6 @@ extern SemaphoreHandle_t printMutex;
 volatile void vTask2Ale(void *pvParameters){
 
     for(;;) {
-    	//Connect acting like a sender
-    	csp_conn_t *conn = csp_connect(CSP_PRIO_NORM, NODE_ADDRESS_RECEIVER, CSP_PORT, 50, CSP_O_NONE);
-    	if(conn == NULL){
-    		FF_PRINTF("Connection failed \n\r");
-    		continue;
-    	}
-
 		//Set TRIG to LOW for few us
 		HAL_GPIO_WritePin(TRIG_GPIO_Port, TRIG_Pin, GPIO_PIN_RESET);
 		delayuS(3);
@@ -49,17 +42,6 @@ volatile void vTask2Ale(void *pvParameters){
 			FF_PRINTF("Distance %f cm\r\n", distance);
 			xSemaphoreGive(printMutex);
 		}
-
-		//Create CSP packet
-		csp_packet_t* packet = csp_buffer_get(sizeof(float));
-		if (packet != NULL) {
-		            memcpy(packet->data, &distance, sizeof(float));
-		            packet->length = sizeof(float);
-		            csp_send(conn, packet);
-		        }
-
-	    // Close the connection
-	    csp_close(conn);
 
 		HAL_Delay(100);
     }

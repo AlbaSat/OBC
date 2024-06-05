@@ -56,7 +56,8 @@ static void MX_GPIO_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_I2C1_Init(void);
-void my_interface_setup(void);
+void my_I2C_interface_setup(void);
+void my_loopback_interface_setup(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -112,7 +113,7 @@ int main(void)
   HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_PLLCLK, RCC_MCODIV_5);
 
   // TODO: add an interface
-  my_interface_setup();
+  my_loopback_interface_setup();
 
   /* USER CODE END 2 */
 
@@ -141,11 +142,8 @@ int main(void)
   //xTaskCreate(vTaskAle, "Task RAM", 1024, NULL, 3, NULL);
   //xTaskCreate(vTask2Ale, "Task ECHO", 1024, NULL, 3, NULL);
 
-  //struct Server_Args my_args = {13, 10};
-  //struct Server_Args my_args_1 = {13, 10};
-
-  xTaskCreate(vCSP_Server, "Task Server", 2048, NULL, 3, NULL);
-  xTaskCreate(vCSP_Client, "Task Client", 2048, NULL, 3, NULL);
+  xTaskCreate(vCSP_Client, "Task Client", 1024, NULL, 3, NULL);
+  xTaskCreate(vCSP_Server, "Task Server", 1024, NULL, 3, NULL);
 
   /* USER CODE END RTOS_THREADS */
 
@@ -365,10 +363,7 @@ int _write(int fd, char * ptr, int len)
   * @param None
   * @retval None
   */
-void my_interface_setup(void) {
-    // Initialize I2C peripheral
-    MX_I2C1_Init();
-
+void my_I2C_interface_setup(void) {
     // Define the CSP I2C interface
     static csp_iface_t csp_i2c_iface;
     static csp_i2c_interface_data_t i2c_interface_data;
@@ -390,6 +385,22 @@ void my_interface_setup(void) {
 
     // Optional: Set the interface as default
     csp_i2c_iface.is_default = 1;
+}
+
+/**
+  * @brief CSP loopback interface setup for testing purposes
+  * @param None
+  * @retval None
+  */
+void my_loopback_interface_setup(void) {
+    // Initialize CSP
+    csp_init();
+
+    // Add loopback interface
+    csp_iflist_add(&csp_if_lo);
+
+    // Set the loopback interface as default
+    csp_if_lo.is_default = 1;
 }
 
 /* USER CODE END 4 */
