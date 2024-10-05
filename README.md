@@ -1,4 +1,4 @@
-# CubeSat On-Board Computer
+# Alba CubeSat On-Board Computer Emulation Project
 
 <img src="./assets/logo.png" alt="Project logo" width="300" height="150" >
 
