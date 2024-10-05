@@ -1,4 +1,6 @@
-# CubeSat On-Board Computer Simulation
+# CubeSat On-Board Computer
+
+<img src="./assets/logo.png" alt="Project logo" width="300" height="150" >
 
 ## Table of Contents
 - [Overview](#overview)
