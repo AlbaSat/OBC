@@ -44,6 +44,8 @@ Welcome to the CubeSat On-Board Computer (OBC) Simulation project! This initiati
   - **FreeRTOS:** For task management and real-time operations.
 - **FAT FileSystem:**
   - **FAT32:**  For efficient and lightweight memory managment.
+- **Communication Protocol:**
+  - **libcsp:**  Cubesat Space Protocol library for reliable and efficient communication between subsystems and ground stations.
 - **Simulation Tools:**
   - **Mock Libraries:** Create fake peripheral drivers to simulate sensor data.
 - **Version Control:**
