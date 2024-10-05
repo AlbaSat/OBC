@@ -1,4 +1,3 @@
-```markdown
 # CubeSat On-Board Computer Simulation
 
 ## Table of Contents
