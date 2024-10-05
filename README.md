@@ -164,8 +164,8 @@ This project is licensed under the [MIT License](LICENSE).
 
 For questions, suggestions, or support, please reach out to:
 
-- **Name:** Alessandro Balzan, Marco Tomasini, Gianluca Pianta
-- **Email:** balzanalessandro2001@gmail.com
+- **Name:** Alessandro Balzan, Marco Tomasini, Gianluca Pianta ...
+- **Email:** balzanalessandro2001@gmail.com, ...
 - **Organization:** Alba CubeSat
 - **GitHub:** https://github.com/alebal123bal(https://github.com/yourusername)
 
