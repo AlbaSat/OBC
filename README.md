@@ -41,7 +41,9 @@ Welcome to the CubeSat On-Board Computer (OBC) Simulation project! This initiati
   - **STM32CubeIDE:** Integrated development environment for writing and debugging firmware.
   - **STM32CubeMX:** Configuration tool for setting up microcontroller peripherals and middleware.
 - **Operating System:**
-  - **FreeRTOS:** (Optional) For task management and real-time operations.
+  - **FreeRTOS:** For task management and real-time operations.
+- **FAT FileSystem:**
+  - **FAT32:**  For efficient and lightweight memory managment.
 - **Simulation Tools:**
   - **Mock Libraries:** Create fake peripheral drivers to simulate sensor data.
 - **Version Control:**
@@ -75,8 +77,8 @@ The simulation environment replicates the key functionalities of the CubeSat's O
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/cubesat-obc-simulation.git
-   cd cubesat-obc-simulation
+   https://github.com/AlbaSat/OBC.git -b libcsp-integration --recurse-submodules
+   cd OBC
    ```
 
 2. **Open the Project in STM32CubeIDE:**
@@ -85,7 +87,6 @@ The simulation environment replicates the key functionalities of the CubeSat's O
    - Navigate to the cloned repository folder and select the project.
 
 3. **Configure the Project:**
-   - Use STM32CubeMX within STM32CubeIDE to configure the necessary peripherals and middleware.
    - Ensure that all simulated peripherals are correctly set up.
 
 4. **Build the Firmware:**
@@ -163,38 +164,12 @@ This project is licensed under the [MIT License](LICENSE).
 
 For questions, suggestions, or support, please reach out to:
 
-- **Name:** [Your Name]
-- **Email:** [your.email@example.com]
-- **Organization:** [Your Organization or Team Name]
-- **GitHub:** [https://github.com/yourusername](https://github.com/yourusername)
+- **Name:** Alessandro Balzan, ...
+- **Email:** balzanalessandro2001@gmail.com
+- **Organization:** Alba CubeSat
+- **GitHub:** https://github.com/alebal123bal(https://github.com/yourusername)
 
 ---
 
 *Happy Coding! 🚀*
-
-```
-
----
-
-**Notes:**
-
-1. **Customization:** Replace placeholders like `yourusername`, `Your Name`, `your.email@example.com`, and `[Your Organization or Team Name]` with your actual information.
-
-2. **Repository URL:** Ensure the GitHub repository URL is accurate where indicated.
-
-3. **Additional Documentation:** Consider adding more detailed documentation in separate files (e.g., `CONTRIBUTING.md`, `LICENSE`, `docs/`) to enrich the project repository.
-
-4. **Screenshots & Diagrams:** For better clarity, include images or diagrams illustrating the system architecture, peripheral connections, or data flow within the simulation.
-
-5. **Dependencies:** If your project has specific dependencies or requires particular versions of tools, list them clearly in the setup instructions.
-
-This README provides a comprehensive overview of your CubeSat OBC simulation project, guiding users through understanding, setting up, and contributing to the project effectively.
-
-# how to clone
-
-Submodules have been added: use the following snippet.
-
-```bash
-git clone https://github.com/AlbaSat/OBC.git -b stm32 --recurse-submodules
-```
 
