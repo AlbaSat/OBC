@@ -61,6 +61,11 @@ void my_loopback_interface_setup(void);
 
 /* USER CODE BEGIN PFP */
 
+// Define the static queue
+char rx_queue_buffer[CSP_RX_QUEUE_LENGTH * ITEM_SIZE];
+csp_static_queue_t rx_static_queue;
+csp_queue_handle_t rx_queue_handle;
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -82,7 +87,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
 
   // Initialize the CSP library
-  csp_init();
+  // csp_init();
 
   /* USER CODE END 1 */
 
@@ -109,10 +114,9 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
-  //Blast HSE on PA8 iutput pin in order to measure the actual clock frequency with the oscillo
+  //Blast HSE on PA8 output pin in order to measure the actual clock frequency with the oscilloscope
   HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_PLLCLK, RCC_MCODIV_5);
 
-  // TODO: add an interface
   my_loopback_interface_setup();
 
   /* USER CODE END 2 */
@@ -132,6 +136,20 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
+
+  // Create the static queue
+  rx_queue_handle = csp_queue_create_static(
+		  CSP_RX_QUEUE_LENGTH,
+		  ITEM_SIZE,
+		  rx_queue_buffer,
+		  &rx_static_queue
+  );
+
+  if (rx_queue_handle == NULL) {
+      FF_PRINTF("Failed to create static rx_queue\n");
+      // Handle error...
+  }
+
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
@@ -142,8 +160,11 @@ int main(void)
   //xTaskCreate(vTaskAle, "Task RAM", 1024, NULL, 3, NULL);
   //xTaskCreate(vTask2Ale, "Task ECHO", 1024, NULL, 3, NULL);
 
-  xTaskCreate(vCSP_Client, "Task Client", 1024, NULL, 3, NULL);
-  xTaskCreate(vCSP_Server, "Task Server", 1024, NULL, 3, NULL);
+  BaseType_t error_server = xTaskCreate(vCSP_Server, "Task Server", 1024, NULL, 3, NULL);
+  FF_PRINTF("%s", (char*) error_server );
+
+  BaseType_t error_client = xTaskCreate(vCSP_Client, "Task Client", 1024, NULL, 1, NULL);
+  FF_PRINTF("%s", (char*) error_client);
 
   /* USER CODE END RTOS_THREADS */
 
@@ -396,11 +417,25 @@ void my_loopback_interface_setup(void) {
     // Initialize CSP
     csp_init();
 
+    csp_rtable_clear();
+
     // Add loopback interface
     csp_iflist_add(&csp_if_lo);
 
     // Set the loopback interface as default
     csp_if_lo.is_default = 1;
+
+    // Setup routing address to server
+    int routing_error = csp_rtable_set(SERVER_ADDRESS, 14, &csp_if_lo, CSP_NO_VIA_ADDRESS);
+    if (routing_error != 0){
+        FF_PRINTF("%s", (char *)routing_error);
+    }
+
+    FF_PRINTF("Connection table\r\n");
+    csp_conn_print_table();
+
+    FF_PRINTF("Interfaces\r\n");
+    csp_iflist_print();
 }
 
 /* USER CODE END 4 */

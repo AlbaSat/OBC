@@ -49,12 +49,13 @@ extern "C" {
 #include "task2_ale.h"
 
 #include "csp.h"
-#include "csp_if_kiss.h"
+#include "csp_types.h"
 #include <vCSP_Server.h>
 #include <vCSP_Client.h>
 #include <kiss_uart_interface.h>
 #include "csp/interfaces/csp_if_i2c.h"
 #include "csp/interfaces/csp_if_lo.h"
+#include <csp/csp_rtable.h>
 #include "csp_i2c_settings.h"
 
 
@@ -94,20 +95,17 @@ void Error_Handler(void);
 #define ECHO_GPIO_Port GPIOA
 
 //libcsp DEFINES
-#define MY_SERVER_PORT  10
-#define SERVER_ADDRESS  255
+#define MY_SERVER_PORT  0
+#define SERVER_ADDRESS  0
 #define CSP_DEF_TIMEOUT 100
 
-/* Server port, the port the server listens on for incoming connections from the client. */
-#define MY_SERVER_PORT  10
+#define CSP_RX_QUEUE_LENGTH 10
+// TODO: pass as item an entire connection instead of a single packet
+#define ITEM_SIZE 100    // Each item size
 
-/* Commandline options */
-static uint8_t server_address = 255;
-
-/* Test mode, used for verifying that host & client can exchange packets over the loopback interface */
-static bool test_mode = true;
-static unsigned int server_received = 0;
-static unsigned int run_duration_in_sec = 3;
+extern char rx_queue_buffer[CSP_RX_QUEUE_LENGTH * ITEM_SIZE];
+extern csp_static_queue_t rx_static_queue;
+extern csp_queue_handle_t rx_queue_handle;
 
 /* USER CODE BEGIN Private defines */
 
