@@ -3,7 +3,10 @@
 #include "main.h"
 
 void vCSP_Client(void *pvParameters) {
-    FF_PRINTF("Client task started\r\n");
+	if(xSemaphoreTake(printMutex, (TickType_t)10) == pdTRUE) {
+	    FF_PRINTF("Client task started\r\n");
+		xSemaphoreGive(printMutex);
+	}
 
 	unsigned int count = 'A';
 
@@ -12,44 +15,60 @@ void vCSP_Client(void *pvParameters) {
     	conn = csp_connect(CSP_PRIO_NORM, SERVER_ADDRESS, MY_SERVER_PORT, CSP_DEF_TIMEOUT, CSP_O_NONE);
 
     	if (conn == NULL) {
-			FF_PRINTF("Connection failed\r\n");
+			if(xSemaphoreTake(printMutex, (TickType_t)10) == pdTRUE) {
+				FF_PRINTF("Connection failed\r\n");
+				xSemaphoreGive(printMutex);
+			}
 			continue;
 		}
         else{
-        	FF_PRINTF("Client Connected!\r\n");
+			if(xSemaphoreTake(printMutex, (TickType_t)10) == pdTRUE) {
+	        	FF_PRINTF("Client Connected!\r\n");
+				xSemaphoreGive(printMutex);
+			}
 
 			// Send packet
 
     		/* 2. Get packet buffer for message/data */
-    		csp_packet_t * packet = csp_buffer_get(100);
-    		if (packet == NULL) {
+    		csp_packet_t * packet_sent = csp_buffer_get(ITEM_SIZE);
+    		if (packet_sent == NULL) {
     			/* Could not get buffer element */
     			csp_print("Failed to get CSP buffer\n");
     			return;
     		}
 
     		/* 3. Copy data to packet */
-            memcpy(packet->data, "Hello world ", 12);
-            memcpy(packet->data + 12, &count, 1);
-            memset(packet->data + 13, 0, 1);
+            memcpy(packet_sent->data, "Hello world ", 12);
+            memcpy(packet_sent->data + 12, &count, 1);
+            memset(packet_sent->data + 13, 0, 1);
             count++;
 
     		/* 4. Set packet length */
-    		packet->length = (strlen((char *) packet->data) + 1); /* include the 0 termination */
+    		packet_sent->length = (strlen((char *) packet_sent->data) + 1); /* include the 0 termination */
 
-			if(csp_queue_enqueue(rx_queue_handle, &packet, CSP_DEF_TIMEOUT) == CSP_QUEUE_OK){
-				FF_PRINTF("Packet %s sent\r\n", (char *) packet->data);
-	            csp_buffer_free(packet);
+			if(csp_queue_enqueue(rx_queue_handle, packet_sent, CSP_DEF_TIMEOUT) == CSP_QUEUE_OK){
+				if(xSemaphoreTake(printMutex, (TickType_t)10) == pdTRUE) {
+					FF_PRINTF("Packet %s sent\r\n", (char *) packet_sent->data);
+					xSemaphoreGive(printMutex);
+				}
+	            csp_buffer_free(packet_sent);
+	            // Close connection
+	            csp_close(conn);
 			}
 			else{
-				FF_PRINTF("Packet not sent\r\n");
+				if(xSemaphoreTake(printMutex, (TickType_t)10) == pdTRUE) {
+					FF_PRINTF("Packet not sent\r\n");
+					xSemaphoreGive(printMutex);
+				}
 				continue;
+		        // Close connection
+		        csp_close(conn);
 			}
         }
 
-        // Close connection
-        csp_close(conn);
+
+        vTaskDelay(1000);
     }
 
-    vTaskDelete(NULL);
+//    vTaskDelete(NULL);
 }

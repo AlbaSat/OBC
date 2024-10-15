@@ -61,6 +61,11 @@ void my_loopback_interface_setup(void);
 
 /* USER CODE BEGIN PFP */
 
+//MUTEX for the FF_PRINTF of the 2 tasks
+SemaphoreHandle_t printMutex;
+
+SemaphoreHandle_t csp_usart_Mutex;
+
 // Define the static queue
 char rx_queue_buffer[CSP_RX_QUEUE_LENGTH * ITEM_SIZE];
 csp_static_queue_t rx_static_queue;
@@ -70,11 +75,6 @@ csp_queue_handle_t rx_queue_handle;
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-//MUTEX for the FF_PRINTF of the 2 tasks
-SemaphoreHandle_t printMutex;
-
-SemaphoreHandle_t csp_usart_Mutex;
 
 /* USER CODE END 0 */
 

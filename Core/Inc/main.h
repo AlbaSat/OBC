@@ -88,6 +88,9 @@ void Error_Handler(void);
 
 /* Private defines -----------------------------------------------------------*/
 
+//PRINT MUTEX
+extern SemaphoreHandle_t printMutex;
+
 // ULTRASONIC SENSOR DEFINES
 #define TRIG_Pin GPIO_PIN_0
 #define TRIG_GPIO_Port GPIOA
